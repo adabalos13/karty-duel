@@ -17,6 +17,7 @@
 - [x] Real-time zobrazení "kdo je v místnosti" (bez refreshe) — ověřeno ve dvou tabech
 - [x] Responzivní layout ověřen na mobilní šířce (375px)
 - [x] `npm run build` a `npm run lint` prochází, commit
+- [x] Vercel deploy (https://karty-duel-pied.vercel.app) + env vars — ověřeno, funguje v produkci
 - [ ] Ověřit real-time i na reálném druhém zařízení (ne jen dva taby) — vyzkoušet s Kátou před Fází 2
 
 ## Fáze 2: Herní engine + Prší
@@ -36,9 +37,8 @@
 - [ ] Reconnect po výpadku spojení
 - [ ] Doladění mobilního UI (menší detaily, ne základní responsivita — ta je hotová od Fáze 1)
 
-## Fáze 5: Deploy
-- [ ] Vercel deploy + env vars
-- [ ] Reálná partie Adam vs. Káťa přes internet
+## Fáze 5: Finální deploy a test
+- [ ] Reálná partie Adam vs. Káťa přes internet (po dokončení Fáze 2/3)
 
 ## Bugs a technický dluh
 (sem přidávej bugy jak je najdeš)
