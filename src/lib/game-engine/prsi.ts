@@ -18,6 +18,7 @@ export function createInitialPrsiState(playerIds: [string, string]): PrsiState {
     turn: playerIds[0],
     currentSuit: firstDiscard.suit,
     pendingDraw: 0,
+    pendingSkip: false,
     winner: null,
     playerOrder: playerIds,
   };
@@ -33,6 +34,7 @@ function otherPlayer(state: PrsiState, playerId: string): string {
 
 export function isCardPlayable(state: PrsiState, card: Card): boolean {
   if (state.pendingDraw > 0) return card.rank === "7";
+  if (state.pendingSkip) return card.rank === "A";
   const top = topCard(state);
   return card.suit === state.currentSuit || card.rank === top.rank;
 }
@@ -82,6 +84,7 @@ export function applyMove(state: PrsiState, move: PrsiMove): PrsiState {
       hands: newHands,
       discard: newDiscard,
       currentSuit: newSuit,
+      pendingSkip: false,
     };
 
     if (move.card.rank === "7") {
@@ -91,7 +94,13 @@ export function applyMove(state: PrsiState, move: PrsiMove): PrsiState {
         turn: otherPlayer(state, move.playerId),
       };
     } else if (move.card.rank === "A") {
-      // Eso u 2 hráčů = stejný hráč hraje znovu, tah se nepředává
+      // Eso = zastavovací karta. Soupeř ztrácí tah, pokud ho nepřebije
+      // vlastním esem (volitelné, viz applyMove "play" o kolo výš).
+      next = {
+        ...next,
+        pendingSkip: true,
+        turn: otherPlayer(state, move.playerId),
+      };
     } else {
       next = { ...next, turn: otherPlayer(state, move.playerId) };
     }
@@ -99,7 +108,7 @@ export function applyMove(state: PrsiState, move: PrsiMove): PrsiState {
   }
 
   if (move.type === "draw") {
-    // Líznutí (ať povinné kvůli sedmičkám nebo protože hráč nemá co hrát)
+    // Líznutí (ať povinné kvůli sedmičkám nebo protože hráč nemá/nechce hrát)
     // vždy ukončí tah a předá ho soupeři.
     const amount = state.pendingDraw > 0 ? state.pendingDraw : 1;
     const reshuffled = reshuffleIfNeeded(state, amount);
@@ -113,6 +122,17 @@ export function applyMove(state: PrsiState, move: PrsiMove): PrsiState {
       deck: remainingDeck,
       hands: newHands,
       pendingDraw: 0,
+      pendingSkip: false,
+      turn: otherPlayer(state, move.playerId),
+    };
+  }
+
+  if (move.type === "acceptSkip") {
+    // Hráč byl zastaven esem a nechce (nebo nemůže) přebít vlastním esem.
+    if (!state.pendingSkip) return state;
+    return {
+      ...state,
+      pendingSkip: false,
       turn: otherPlayer(state, move.playerId),
     };
   }

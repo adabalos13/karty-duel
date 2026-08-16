@@ -28,12 +28,13 @@ Po každé změně kódu MUSÍŠ aktualizovat:
 
 ## Pravidla Prší — NEMĚNIT bez potvrzení od Adama
 - České karty: Žaludy, Zelené, Červené, Kule (NE francouzský žolíkový balíček srdce/káry/kříže/piky)
-- 7 = líznutí 2, stackovatelné
-- Eso = stop / u 2 hráčů = hraj znovu
+- 7 = líznutí 2, stackovatelné (max 8, dané počtem sedmiček v balíčku)
+- Eso = zastavovací karta, soupeř ztrácí tah — může přebít vlastním esem, ale NENÍ to povinné (i s esem může přeskočení přijmout)
 - Svršek = mění barvu
 - Spodek = žádný efekt
 - Líznutí (povinné i dobrovolné) VŽDY rovnou ukončí tah — žádné "zahraj taženou kartu" ani tlačítko na ukončení tahu
-Kompletní pravidla viz `PRD.md`.
+- Karty 7-10 zobrazují skutečné pipsy (N ikon barvy), ne jen ikonu + číslo
+Kompletní pravidla viz `PRD.md`. Zdroj: https://karetnihry.blogspot.com/2010/05/prsi-pravidla.html
 
 ## Workflow pro nové funkce
 1. Přečti PRD.md - ověř, že funkce je v plánu

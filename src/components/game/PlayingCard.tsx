@@ -20,6 +20,12 @@ const RANK_LABEL: Record<Rank, string> = {
 };
 
 const FACE_RANKS: Rank[] = ["J", "Q", "K", "A"];
+const PIP_COUNT: Partial<Record<Rank, number>> = {
+  "7": 7,
+  "8": 8,
+  "9": 9,
+  "10": 10,
+};
 
 interface PlayingCardProps {
   card?: Card;
@@ -27,6 +33,22 @@ interface PlayingCardProps {
   disabled?: boolean;
   faceDown?: boolean;
   className?: string;
+}
+
+function PipColumn({ suit, count }: { suit: Suit; count: number }) {
+  return (
+    <div className="flex flex-col gap-[2px]">
+      {Array.from({ length: count }).map((_, i) => (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          key={i}
+          src={`/cards/suit-${suit}.png`}
+          alt=""
+          className="h-[6px] w-[6px] object-contain sm:h-[8px] sm:w-[8px]"
+        />
+      ))}
+    </div>
+  );
 }
 
 export function PlayingCard({
@@ -40,7 +62,7 @@ export function PlayingCard({
     return (
       <div
         className={cn(
-          "h-16 w-11 shrink-0 rounded-md border bg-muted sm:h-20 sm:w-14",
+          "h-20 w-14 shrink-0 rounded-lg border bg-muted sm:h-24 sm:w-16",
           className,
         )}
       />
@@ -48,6 +70,7 @@ export function PlayingCard({
   }
 
   const isFaceCard = FACE_RANKS.includes(card.rank);
+  const pipCount = PIP_COUNT[card.rank];
 
   return (
     <button
@@ -55,7 +78,7 @@ export function PlayingCard({
       onClick={onClick}
       disabled={!onClick || disabled}
       className={cn(
-        "relative flex h-16 w-11 shrink-0 flex-col items-center justify-center gap-0.5 overflow-hidden rounded-md border bg-background font-semibold shadow-sm transition-transform sm:h-20 sm:w-14",
+        "relative flex h-20 w-14 shrink-0 flex-col items-center justify-center overflow-hidden rounded-lg border bg-background font-semibold shadow-sm transition-transform sm:h-24 sm:w-16",
         onClick && !disabled && "cursor-pointer hover:-translate-y-1",
         disabled && "opacity-40",
         className,
@@ -70,15 +93,20 @@ export function PlayingCard({
         />
       ) : (
         <>
-          <span className={cn("text-xs sm:text-sm", SUIT_COLOR[card.suit])}>
+          <span
+            className={cn(
+              "absolute top-0.5 left-1 text-[9px] leading-none sm:text-[10px]",
+              SUIT_COLOR[card.suit],
+            )}
+          >
             {RANK_LABEL[card.rank]}
           </span>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={`/cards/suit-${card.suit}.png`}
-            alt={card.suit}
-            className="h-6 w-6 object-contain sm:h-8 sm:w-8"
-          />
+          {pipCount ? (
+            <div className="flex gap-[3px]">
+              <PipColumn suit={card.suit} count={Math.ceil(pipCount / 2)} />
+              <PipColumn suit={card.suit} count={Math.floor(pipCount / 2)} />
+            </div>
+          ) : null}
         </>
       )}
     </button>

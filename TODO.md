@@ -29,6 +29,9 @@
 - [x] Úprava dle zpětné vazby: líznutí vždy rovnou ukončí tah (odstraněno tlačítko "Ukončit tah")
 - [x] Úprava dle zpětné vazby: české karty (žaludy/zelené/červené/kule) místo francouzských symbolů
 - [x] Vlastní grafika karet (AI-generované ikony barev + ilustrace Spodek/Svršek/Král/Eso) — viz `public/cards/` a `scripts/process-card-art.py`
+- [x] Úprava dle zpětné vazby: eso lze přebít druhým esem (volitelně), ověřeno proti pravidlům na karetnihry.blogspot.com
+- [x] Úprava dle zpětné vazby: karty 7-10 zobrazují skutečné pipsy místo čísla + ikony
+- [x] Modernější vzhled — nový font (Plus Jakarta Sans), teplá barevná paleta (bordó/zlatá), hezčí tlačítka
 
 ## Fáze 3: Uno
 - [ ] Pravidla Uno na stejném enginu

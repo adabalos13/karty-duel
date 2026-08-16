@@ -117,6 +117,11 @@ export function PrsiGame({
     persist(applyMove(state!, { type: "draw", playerId: myPlayerId }));
   }
 
+  function handleAcceptSkip() {
+    if (!myTurn) return;
+    persist(applyMove(state!, { type: "acceptSkip", playerId: myPlayerId }));
+  }
+
   if (state.winner) {
     const iWon = state.winner === myPlayerId;
     return (
@@ -148,13 +153,22 @@ export function PrsiGame({
         <p className="text-xs text-muted-foreground">
           Barva: {SUIT_LABEL[state.currentSuit]}
           {state.pendingDraw > 0 && ` · Líznutí: ${state.pendingDraw}`}
+          {state.pendingSkip && ` · Eso čeká na přebití`}
         </p>
         <p className="text-sm font-medium">
           {myTurn ? "Jsi na tahu" : `Na tahu: ${playerNames[state.turn]}`}
         </p>
       </div>
 
-      {myTurn && !canPlaySomething && (
+      {myTurn && state.pendingSkip && (
+        <div className="flex justify-center">
+          <Button variant="outline" onClick={handleAcceptSkip}>
+            Nepřebíjet — přeskočit tah
+          </Button>
+        </div>
+      )}
+
+      {myTurn && !state.pendingSkip && !canPlaySomething && (
         <div className="flex justify-center">
           <Button onClick={handleDraw}>
             Lízni {state.pendingDraw > 0 ? state.pendingDraw : "1"} kartu/y

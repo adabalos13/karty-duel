@@ -13,10 +13,12 @@ export interface PrsiState {
   turn: string;
   currentSuit: Suit;
   pendingDraw: number;
+  pendingSkip: boolean;
   winner: string | null;
   playerOrder: [string, string];
 }
 
 export type PrsiMove =
   | { type: "play"; playerId: string; card: Card; chosenSuit?: Suit }
-  | { type: "draw"; playerId: string };
+  | { type: "draw"; playerId: string }
+  | { type: "acceptSkip"; playerId: string };

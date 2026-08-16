@@ -31,11 +31,13 @@ Dva hráči — Adam a Káťa. Žádné publikum, žádné účty třetích stra
 | Karta | Efekt |
 |---|---|
 | **7** | Další hráč lízne 2 karty z balíčku. Dá se stackovat — pokud má i druhý hráč 7, může ji přihodit a poslat "dluh" zpět místo lízání. |
-| **Eso** | Druhý hráč má stop (u 2 hráčů to znamená: hráč, co eso zahrál, hraje hned znovu). |
+| **Eso** | Zastavovací karta — druhý hráč ztrácí tah, POKUD ho nepřebije vlastním esem (volitelné, není to povinnost — i s esem v ruce může hráč přeskočení přijmout). Esa se dají přebíjet opakovaně, dokud někomu nedojdou. |
 | **Svršek** | Mění barvu — hráč, co ho zahrál, řekne, jaká barva se hraje dál. |
 | **Spodek** | Žádný speciální efekt, hraje se jako normální karta (musí sednout barvou/hodnotou). |
 
 **Nemůžeš hrát?** Lízneš kartu z balíčku (1, nebo víc při dluhu ze sedmiček) a **tím tvůj tah končí** — i kdyby byla tažená karta hratelná, nezahraješ ji hned, tah automaticky přechází na soupeře.
+
+**Vzhled karet 7-10:** karta zobrazuje skutečný počet ikon barvy (pipsy, jako na klasickém balíčku), ne jen jednu ikonu + číslo. Malé číslo v rohu navíc pro rychlou orientaci.
 
 ### 4. Uno
 Standardní pravidla (108 karet, barvy červená/žlutá/zelená/modrá 0-9, Skip, Reverse, Draw Two, Wild, Wild Draw Four). Case bez speciálních house rules — pokud Adam a Káťa chtějí odchylku, upřesní se před Fází 3.
