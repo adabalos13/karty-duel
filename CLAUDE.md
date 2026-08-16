@@ -32,9 +32,14 @@ Po každé změně kódu MUSÍŠ aktualizovat:
 - Eso = zastavovací karta, soupeř ztrácí tah — může přebít vlastním esem, ale NENÍ to povinné (i s esem může přeskočení přijmout)
 - Svršek = mění barvu
 - Spodek = žádný efekt
+- Líznutí je VŽDY dobrovolné, i s hratelnou kartou v ruce — tlačítko "Lízni" je na tahu vidět pořád, ne jen jako fallback
 - Líznutí (povinné i dobrovolné) VŽDY rovnou ukončí tah — žádné "zahraj taženou kartu" ani tlačítko na ukončení tahu
-- Karty 7-10 zobrazují skutečné pipsy (N ikon barvy), ne jen ikonu + číslo
+- Karty 7-10 zobrazují skutečné pipsy (N ikon barvy) + římské číslice (VII, VIII, IX, X) v rohu, ne arabské číslo + jedna ikona
 Kompletní pravidla viz `PRD.md`. Zdroj: https://karetnihry.blogspot.com/2010/05/prsi-pravidla.html
+
+## Jména hráčů a kódy místností — NEMĚNIT bez potvrzení od Adama
+- Žádné přednastavené jméno v placeholderu (appka není natvrdo pro Adama a Káťu, hraje s ní kdokoliv)
+- `room_code` generovaný jako souhláska-samohláska-souhláska-samohláska (`src/lib/room-code.ts`), vždy malými písmeny — snadno vyslovitelné nahlas
 
 ## Workflow pro nové funkce
 1. Přečti PRD.md - ověř, že funkce je v plánu

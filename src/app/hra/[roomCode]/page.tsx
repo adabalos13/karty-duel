@@ -21,7 +21,7 @@ const GAME_LABEL: Record<Room["game_type"], string> = {
 
 export default function RoomPage() {
   const params = useParams<{ roomCode: string }>();
-  const roomCode = params.roomCode.toUpperCase();
+  const roomCode = params.roomCode.toLowerCase();
 
   const [room, setRoom] = useState<Room | null>(null);
   const [players, setPlayers] = useState<Player[]>([]);
@@ -199,7 +199,7 @@ export default function RoomPage() {
       <Card className={gameInProgress ? "w-full max-w-md" : "w-full max-w-sm"}>
         <CardHeader>
           <div className="flex items-center justify-between gap-2">
-            <CardTitle className="text-2xl tracking-widest">{roomCode}</CardTitle>
+            <CardTitle className="text-2xl">{roomCode}</CardTitle>
             <Badge variant="secondary">{GAME_LABEL[room.game_type]}</Badge>
           </div>
         </CardHeader>

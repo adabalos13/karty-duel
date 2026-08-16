@@ -32,6 +32,11 @@
 - [x] Úprava dle zpětné vazby: eso lze přebít druhým esem (volitelně), ověřeno proti pravidlům na karetnihry.blogspot.com
 - [x] Úprava dle zpětné vazby: karty 7-10 zobrazují skutečné pipsy místo čísla + ikony
 - [x] Modernější vzhled — nový font (Plus Jakarta Sans), teplá barevná paleta (bordó/zlatá), hezčí tlačítka
+- [x] Úprava dle zpětné vazby: líznutí vždy dobrovolné, i s hratelnou kartou v ruce
+- [x] Úprava dle zpětné vazby: římské číslice (VII-X) na kartách 7-10
+- [x] Úprava dle zpětné vazby: výrazně zvětšené karty/pipsy pro mobil
+- [x] Úprava dle zpětné vazby: bez přednastaveného jména (generický placeholder), aby appku mohl hrát kdokoliv
+- [x] Úprava dle zpětné vazby: vyslovitelné kódy místností (souhláska-samohláska-souhláska-samohláska, `src/lib/room-code.ts`)
 
 ## Fáze 3: Uno
 - [ ] Pravidla Uno na stejném enginu

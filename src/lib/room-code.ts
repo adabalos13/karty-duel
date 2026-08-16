@@ -1,10 +1,12 @@
-// Bez znaků, které se snadno pletou (I, O, 0, 1)
-const ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+// Vyslovitelný kód ve formátu souhláska-samohláska-souhláska-samohláska
+// (např. "hoka", "kico"), ať se dá snadno nadiktovat druhému hráči.
+const CONSONANTS = "bcdfghjklmnprstvz".split("");
+const VOWELS = "aeiou".split("");
 
-export function generateRoomCode(length = 4): string {
-  let code = "";
-  for (let i = 0; i < length; i++) {
-    code += ALPHABET[Math.floor(Math.random() * ALPHABET.length)];
-  }
-  return code;
+function pick(letters: string[]): string {
+  return letters[Math.floor(Math.random() * letters.length)];
+}
+
+export function generateRoomCode(): string {
+  return pick(CONSONANTS) + pick(VOWELS) + pick(CONSONANTS) + pick(VOWELS);
 }

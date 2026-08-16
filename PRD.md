@@ -4,12 +4,13 @@
 Jednoduchá webová appka, kde Adam a Káťa hrají proti sobě online karetní hry (Prší, Uno) — z počítače i mobilu, kdykoliv, bez instalace čehokoliv.
 
 ## Cílová skupina
-Dva hráči — Adam a Káťa. Žádné publikum, žádné účty třetích stran, jen sdílený odkaz na místnost.
+Dva hráči kdokoliv (vzniklo pro Adama a Káťu, ale appka není na ně natvrdo navázaná — žádné přednastavené jméno). Žádné publikum, žádné účty třetích stran, jen sdílený odkaz/kód místnosti.
 
 ## Klíčové funkce
 
 ### 1. Lobby / místnost
 - Vytvoření místnosti: zadání jména, výběr hry (Prší / Uno), vygenerování krátkého `room_code` a odkazu ke sdílení
+- `room_code` má formát souhláska-samohláska-souhláska-samohláska (např. `hoka`, `kico`) — snadno se nahlas nadiktuje druhému hráči, i když každý hraje na svém mobilu vedle sebe
 - Připojení do místnosti: zadání jména + kódu (nebo přímo přes odkaz)
 - Zobrazení, kdo je v místnosti připojený (real-time, bez refreshe)
 - Host spustí hru tlačítkem "Začít hru"
@@ -35,9 +36,9 @@ Dva hráči — Adam a Káťa. Žádné publikum, žádné účty třetích stra
 | **Svršek** | Mění barvu — hráč, co ho zahrál, řekne, jaká barva se hraje dál. |
 | **Spodek** | Žádný speciální efekt, hraje se jako normální karta (musí sednout barvou/hodnotou). |
 
-**Nemůžeš hrát?** Lízneš kartu z balíčku (1, nebo víc při dluhu ze sedmiček) a **tím tvůj tah končí** — i kdyby byla tažená karta hratelná, nezahraješ ji hned, tah automaticky přechází na soupeře.
+**Líznutí je vždy dobrovolné** — i když máš hratelnou kartu, můžeš se rozhodnout radši líznout (např. abys nemusel zahrát nevýhodnou kartu). Líznutí (ať povinné, nebo dobrovolné) **vždy rovnou končí tvůj tah** — i kdyby byla tažená karta hratelná, nezahraješ ji hned, tah automaticky přechází na soupeře.
 
-**Vzhled karet 7-10:** karta zobrazuje skutečný počet ikon barvy (pipsy, jako na klasickém balíčku), ne jen jednu ikonu + číslo. Malé číslo v rohu navíc pro rychlou orientaci.
+**Vzhled karet 7-10:** karta zobrazuje skutečný počet ikon barvy (pipsy, jako na klasickém balíčku), ne jen jednu ikonu + číslo. Číslo v rohu je psané římskými číslicemi (VII, VIII, IX, X) pro rychlou orientaci.
 
 ### 4. Uno
 Standardní pravidla (108 karet, barvy červená/žlutá/zelená/modrá 0-9, Skip, Reverse, Draw Two, Wild, Wild Draw Four). Case bez speciálních house rules — pokud Adam a Káťa chtějí odchylku, upřesní se před Fází 3.

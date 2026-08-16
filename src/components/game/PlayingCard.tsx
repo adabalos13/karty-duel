@@ -9,10 +9,10 @@ const SUIT_COLOR: Record<Suit, string> = {
 };
 
 const RANK_LABEL: Record<Rank, string> = {
-  "7": "7",
-  "8": "8",
-  "9": "9",
-  "10": "10",
+  "7": "VII",
+  "8": "VIII",
+  "9": "IX",
+  "10": "X",
   J: "Sp", // Spodek
   Q: "Sv", // Svršek
   K: "Kr", // Král
@@ -37,14 +37,14 @@ interface PlayingCardProps {
 
 function PipColumn({ suit, count }: { suit: Suit; count: number }) {
   return (
-    <div className="flex flex-col gap-[2px]">
+    <div className="flex flex-col gap-[3px]">
       {Array.from({ length: count }).map((_, i) => (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           key={i}
           src={`/cards/suit-${suit}.png`}
           alt=""
-          className="h-[6px] w-[6px] object-contain sm:h-[8px] sm:w-[8px]"
+          className="h-[10px] w-[10px] object-contain sm:h-[13px] sm:w-[13px]"
         />
       ))}
     </div>
@@ -62,7 +62,7 @@ export function PlayingCard({
     return (
       <div
         className={cn(
-          "h-20 w-14 shrink-0 rounded-lg border bg-muted sm:h-24 sm:w-16",
+          "h-28 w-20 shrink-0 rounded-lg border bg-muted sm:h-32 sm:w-24",
           className,
         )}
       />
@@ -78,7 +78,7 @@ export function PlayingCard({
       onClick={onClick}
       disabled={!onClick || disabled}
       className={cn(
-        "relative flex h-20 w-14 shrink-0 flex-col items-center justify-center overflow-hidden rounded-lg border bg-background font-semibold shadow-sm transition-transform sm:h-24 sm:w-16",
+        "relative flex h-28 w-20 shrink-0 flex-col items-center justify-center overflow-hidden rounded-lg border bg-background font-semibold shadow-sm transition-transform sm:h-32 sm:w-24",
         onClick && !disabled && "cursor-pointer hover:-translate-y-1",
         disabled && "opacity-40",
         className,
@@ -95,14 +95,14 @@ export function PlayingCard({
         <>
           <span
             className={cn(
-              "absolute top-0.5 left-1 text-[9px] leading-none sm:text-[10px]",
+              "absolute top-1 left-1.5 text-xs leading-none font-bold sm:text-sm",
               SUIT_COLOR[card.suit],
             )}
           >
             {RANK_LABEL[card.rank]}
           </span>
           {pipCount ? (
-            <div className="flex gap-[3px]">
+            <div className="flex gap-1">
               <PipColumn suit={card.suit} count={Math.ceil(pipCount / 2)} />
               <PipColumn suit={card.suit} count={Math.floor(pipCount / 2)} />
             </div>

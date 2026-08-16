@@ -168,9 +168,9 @@ export function PrsiGame({
         </div>
       )}
 
-      {myTurn && !state.pendingSkip && !canPlaySomething && (
+      {myTurn && !state.pendingSkip && (
         <div className="flex justify-center">
-          <Button onClick={handleDraw}>
+          <Button variant={canPlaySomething ? "outline" : "default"} onClick={handleDraw}>
             Lízni {state.pendingDraw > 0 ? state.pendingDraw : "1"} kartu/y
           </Button>
         </div>

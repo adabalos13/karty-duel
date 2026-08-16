@@ -65,7 +65,7 @@ export default function HomePage() {
   }
 
   async function handleJoin() {
-    const code = joinCode.trim().toUpperCase();
+    const code = joinCode.trim().toLowerCase();
     if (!name.trim() || !code) {
       setError("Zadej jméno a kód místnosti.");
       return;
@@ -128,7 +128,7 @@ export default function HomePage() {
                   id="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Adam"
+                  placeholder="Tvoje jméno"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -172,7 +172,7 @@ export default function HomePage() {
                   id="join-name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Káťa"
+                  placeholder="Tvoje jméno"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -180,10 +180,9 @@ export default function HomePage() {
                 <Input
                   id="join-code"
                   value={joinCode}
-                  onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
-                  placeholder="AB3X"
+                  onChange={(e) => setJoinCode(e.target.value.toLowerCase())}
+                  placeholder="hoka"
                   maxLength={4}
-                  className="uppercase tracking-widest"
                 />
               </div>
               {error && <p className="text-sm text-destructive">{error}</p>}
