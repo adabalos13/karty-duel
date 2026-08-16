@@ -21,11 +21,11 @@
 - [ ] Ověřit real-time i na reálném druhém zařízení (ne jen dva taby) — vyzkoušet s Kátou před Fází 2
 
 ## Fáze 2: Herní engine + Prší
-- [ ] Obecný engine: balíček, míchání, rozdání, střídání tahů, detekce konce
-- [ ] Pravidla Prší (7, eso, svršek, spodek — viz PRD.md)
-- [ ] Herní UI: ruka, lícovka, tah karty, výběr barvy u svršku
-- [ ] Synchronizace tahů přes Supabase Realtime
-- [ ] Zobrazení vítěze + "Hrát znovu"
+- [x] Obecný engine: balíček, míchání, rozdání, střídání tahů, detekce konce (`src/lib/game-engine/`)
+- [x] Pravidla Prší (7 stackovatelné, eso = extra tah, svršek = změna barvy, spodek bez efektu) — ověřeno testy i ručně ve dvou oknech
+- [x] Herní UI: ruka, lícovka, tah karty, líznutí, "Ukončit tah", výběr barvy u svršku (`src/components/game/PrsiGame.tsx`)
+- [x] Synchronizace tahů přes Supabase Realtime — ověřeno živě mezi dvěma okny
+- [x] Zobrazení vítěze + "Hrát znovu" (přegeneruje stav ve stejné místnosti)
 
 ## Fáze 3: Uno
 - [ ] Pravidla Uno na stejném enginu

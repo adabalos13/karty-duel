@@ -10,6 +10,8 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/lib/supabase/client";
 import { getPlayerId, getSavedName, saveName, savePlayerId } from "@/lib/local-identity";
+import { createInitialPrsiState } from "@/lib/game-engine/prsi";
+import { PrsiGame } from "@/components/game/PrsiGame";
 import type { Player, Room } from "@/types/game";
 
 const GAME_LABEL: Record<Room["game_type"], string> = {
@@ -24,6 +26,7 @@ export default function RoomPage() {
   const [room, setRoom] = useState<Room | null>(null);
   const [players, setPlayers] = useState<Player[]>([]);
   const [myPlayerId, setMyPlayerId] = useState<string | null>(null);
+  const [gameId, setGameId] = useState<string | null>(null);
   const [notFound, setNotFound] = useState(false);
   const [joinName, setJoinName] = useState(() => getSavedName());
   const [joining, setJoining] = useState(false);
@@ -36,6 +39,17 @@ export default function RoomPage() {
       .eq("room_id", roomId)
       .order("joined_at", { ascending: true });
     if (data) setPlayers(data);
+  }, []);
+
+  const loadGame = useCallback(async (roomId: string) => {
+    const { data } = await supabase
+      .from("games")
+      .select("id")
+      .eq("room_id", roomId)
+      .order("updated_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (data) setGameId(data.id);
   }, []);
 
   useEffect(() => {
@@ -56,6 +70,9 @@ export default function RoomPage() {
       setRoom(roomData);
       setMyPlayerId(getPlayerId(roomCode));
       await loadPlayers(roomData.id);
+      if (roomData.status === "playing") {
+        await loadGame(roomData.id);
+      }
 
       const channel = supabase
         .channel(`room:${roomData.id}`)
@@ -67,7 +84,13 @@ export default function RoomPage() {
         .on(
           "postgres_changes",
           { event: "UPDATE", schema: "public", table: "rooms", filter: `id=eq.${roomData.id}` },
-          (payload) => setRoom(payload.new as Room),
+          (payload) => {
+            const updated = payload.new as Room;
+            setRoom(updated);
+            if (updated.status === "playing") {
+              loadGame(updated.id);
+            }
+          },
         )
         .subscribe();
 
@@ -81,7 +104,7 @@ export default function RoomPage() {
       active = false;
       cleanupPromise.then((cleanup) => cleanup?.());
     };
-  }, [roomCode, loadPlayers]);
+  }, [roomCode, loadPlayers, loadGame]);
 
   async function handleJoin() {
     if (!room) return;
@@ -112,8 +135,28 @@ export default function RoomPage() {
   }
 
   async function handleStart() {
-    if (!room) return;
+    if (!room || players.length < 2) return;
+    if (room.game_type === "prsi") {
+      const ids = players.map((p) => p.id) as [string, string];
+      const initialState = createInitialPrsiState(ids);
+      const { data: game } = await supabase
+        .from("games")
+        .insert({ room_id: room.id, state: initialState })
+        .select("id")
+        .single();
+      if (game) setGameId(game.id);
+    }
     await supabase.from("rooms").update({ status: "playing" }).eq("id", room.id);
+  }
+
+  async function handlePlayAgain() {
+    if (!room || !gameId || players.length < 2) return;
+    const ids = players.map((p) => p.id) as [string, string];
+    const initialState = createInitialPrsiState(ids);
+    await supabase
+      .from("games")
+      .update({ state: initialState, updated_at: new Date().toISOString() })
+      .eq("id", gameId);
   }
 
   const shareUrl =
@@ -148,10 +191,12 @@ export default function RoomPage() {
 
   const isHost = players[0]?.id === myPlayerId;
   const iAmIn = players.some((p) => p.id === myPlayerId);
+  const gameInProgress = room.status === "playing" && room.game_type === "prsi";
+  const playerNames = Object.fromEntries(players.map((p) => [p.id, p.name]));
 
   return (
     <main className="flex flex-1 items-center justify-center p-4">
-      <Card className="w-full max-w-sm">
+      <Card className={gameInProgress ? "w-full max-w-md" : "w-full max-w-sm"}>
         <CardHeader>
           <div className="flex items-center justify-between gap-2">
             <CardTitle className="text-2xl tracking-widest">{roomCode}</CardTitle>
@@ -159,7 +204,7 @@ export default function RoomPage() {
           </div>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
-          {!iAmIn && (
+          {!iAmIn && room.status === "waiting" && (
             <div className="flex flex-col gap-3 rounded-md border p-3">
               <Label htmlFor="join-name">Tvoje jméno</Label>
               <Input
@@ -175,27 +220,29 @@ export default function RoomPage() {
             </div>
           )}
 
-          <div>
-            <p className="mb-2 text-sm font-medium text-muted-foreground">
-              Hráči ({players.length}/2)
-            </p>
-            <ul className="flex flex-col gap-2">
-              {players.map((p) => (
-                <li
-                  key={p.id}
-                  className="flex items-center justify-between rounded-md border px-3 py-2"
-                >
-                  <span>{p.name}</span>
-                  {p.id === myPlayerId && (
-                    <Badge variant="outline">ty</Badge>
-                  )}
-                </li>
-              ))}
-              {players.length === 0 && (
-                <li className="text-sm text-muted-foreground">Zatím nikdo.</li>
-              )}
-            </ul>
-          </div>
+          {!gameInProgress && (
+            <div>
+              <p className="mb-2 text-sm font-medium text-muted-foreground">
+                Hráči ({players.length}/2)
+              </p>
+              <ul className="flex flex-col gap-2">
+                {players.map((p) => (
+                  <li
+                    key={p.id}
+                    className="flex items-center justify-between rounded-md border px-3 py-2"
+                  >
+                    <span>{p.name}</span>
+                    {p.id === myPlayerId && (
+                      <Badge variant="outline">ty</Badge>
+                    )}
+                  </li>
+                ))}
+                {players.length === 0 && (
+                  <li className="text-sm text-muted-foreground">Zatím nikdo.</li>
+                )}
+              </ul>
+            </div>
+          )}
 
           {room.status === "waiting" && iAmIn && (
             <div className="flex flex-col gap-2">
@@ -215,10 +262,23 @@ export default function RoomPage() {
             </div>
           )}
 
-          {room.status === "playing" && (
+          {room.status === "playing" && room.game_type === "uno" && (
             <p className="text-center text-sm text-muted-foreground">
-              Hra běží — samotné {GAME_LABEL[room.game_type]} UI přijde ve Fázi 2.
+              Hra běží — samotné Uno UI přijde ve Fázi 3.
             </p>
+          )}
+
+          {gameInProgress && myPlayerId && gameId && (
+            <PrsiGame
+              gameId={gameId}
+              myPlayerId={myPlayerId}
+              playerNames={playerNames}
+              onPlayAgain={handlePlayAgain}
+            />
+          )}
+
+          {gameInProgress && (!myPlayerId || !gameId) && (
+            <p className="text-center text-sm text-muted-foreground">Načítám hru…</p>
           )}
         </CardContent>
       </Card>
