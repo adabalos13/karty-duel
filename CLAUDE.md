@@ -30,7 +30,7 @@ Po každé změně kódu MUSÍŠ aktualizovat:
 - České karty: Žaludy, Zelené, Červené, Kule (NE francouzský žolíkový balíček srdce/káry/kříže/piky)
 - 7 = líznutí 2, stackovatelné (max 8, dané počtem sedmiček v balíčku)
 - Eso = zastavovací karta, soupeř ztrácí tah — může přebít vlastním esem, ale NENÍ to povinné (i s esem může přeskočení přijmout)
-- Svršek = mění barvu
+- Svršek = ŽOLÍK, hraje se na jakoukoli barvu/hodnotu (viz `isCardPlayable` v `prsi.ts` — `card.rank === "Q"` má vlastní `return true` větev, nespadá pod normální suit/rank match). Nejde zahrát jen během pendingDraw/pendingSkip.
 - Spodek = žádný efekt
 - Líznutí je VŽDY dobrovolné, i s hratelnou kartou v ruce — tlačítko "Lízni" je na tahu vidět pořád, ne jen jako fallback
 - Líznutí (povinné i dobrovolné) VŽDY rovnou ukončí tah — žádné "zahraj taženou kartu" ani tlačítko na ukončení tahu
@@ -55,4 +55,7 @@ Kompletní pravidla viz `PRD.md`. Zdroj: https://karetnihry.blogspot.com/2010/05
 Viz `TECHSTACK.md` — aktualizuj tam, ne tady.
 
 ## Známé problémy a řešení
-(zatím žádné — přidávej sem, jak narazíte na záludné bugy)
+
+### Svršek se choval jako normální karta
+- Příčina: `isCardPlayable` neměl výjimku pro rank "Q", takže musel sedět barvou/hodnotou jako každá jiná karta — chyba proti pravidlům (Svršek je žolík).
+- Řešení: přidána samostatná větev `if (card.rank === "Q") return true;` před běžnou suit/rank kontrolou.

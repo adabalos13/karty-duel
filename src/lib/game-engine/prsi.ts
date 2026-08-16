@@ -35,6 +35,9 @@ function otherPlayer(state: PrsiState, playerId: string): string {
 export function isCardPlayable(state: PrsiState, card: Card): boolean {
   if (state.pendingDraw > 0) return card.rank === "7";
   if (state.pendingSkip) return card.rank === "A";
+  // Svršek je žolík — hraje se na jakoukoli barvu i hodnotu (mimo dluh
+  // ze sedmičky a čekání na přebití esa, ošetřené výše).
+  if (card.rank === "Q") return true;
   const top = topCard(state);
   return card.suit === state.currentSuit || card.rank === top.rank;
 }

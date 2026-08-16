@@ -42,6 +42,7 @@
 - [x] Úprava dle zpětné vazby: tlačítko "Opustit hru" — trvalý odkaz zpět na úvod v hlavičce místnosti
 - [x] Úprava dle zpětné vazby: nehratelné karty se nezešedivují, jen krátká hláška po kliknutí
 - [x] Uno dočasně schované v UI (jen Prší lze založit), dokud nezačneme na Unu pracovat
+- [x] Oprava bugu: Svršek je žolík (jde na jakoukoli barvu/hodnotu), dřív musel sedět jako normální karta — ověřeno testem enginu
 
 ## Fáze 3: Uno
 - [ ] Pravidla Uno na stejném enginu

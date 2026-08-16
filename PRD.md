@@ -34,7 +34,7 @@ Dva hráči kdokoliv (vzniklo pro Adama a Káťu, ale appka není na ně natvrdo
 |---|---|
 | **7** | Další hráč lízne 2 karty z balíčku. Dá se stackovat — pokud má i druhý hráč 7, může ji přihodit a poslat "dluh" zpět místo lízání. |
 | **Eso** | Zastavovací karta — druhý hráč ztrácí tah, POKUD ho nepřebije vlastním esem (volitelné, není to povinnost — i s esem v ruce může hráč přeskočení přijmout). Esa se dají přebíjet opakovaně, dokud někomu nedojdou. |
-| **Svršek** | Mění barvu — hráč, co ho zahrál, řekne, jaká barva se hraje dál. |
+| **Svršek** | Žolík — jde zahrát na JAKOUKOLIV barvu i hodnotu (nemusí sedět), mění barvu, hráč co ho zahrál řekne, jaká barva se hraje dál. Výjimka: nejde zahrát, dokud čekáš na přebití sedmičky (dluh líznutí) nebo esa (přeskočení) — to musíš vyřešit napřed. |
 | **Spodek** | Žádný speciální efekt, hraje se jako normální karta (musí sednout barvou/hodnotou). |
 
 **Líznutí je vždy dobrovolné** — i když máš hratelnou kartu, můžeš se rozhodnout radši líznout (např. abys nemusel zahrát nevýhodnou kartu). Líznutí (ať povinné, nebo dobrovolné) **vždy rovnou končí tvůj tah** — i kdyby byla tažená karta hratelná, nezahraješ ji hned, tah automaticky přechází na soupeře.
