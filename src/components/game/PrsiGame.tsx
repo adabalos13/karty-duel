@@ -18,12 +18,12 @@ import type { Card, PrsiState, Suit } from "@/lib/game-engine/types";
 import { PlayingCard } from "./PlayingCard";
 
 const SUIT_LABEL: Record<Suit, string> = {
-  hearts: "Srdce",
-  diamonds: "Káry",
-  clubs: "Kříže",
-  spades: "Piky",
+  zaludy: "Žaludy",
+  zelene: "Zelené",
+  cervene: "Červené",
+  kule: "Kule",
 };
-const SUITS: Suit[] = ["hearts", "diamonds", "clubs", "spades"];
+const SUITS: Suit[] = ["zaludy", "zelene", "cervene", "kule"];
 
 interface PrsiGameProps {
   gameId: string;
@@ -117,11 +117,6 @@ export function PrsiGame({
     persist(applyMove(state!, { type: "draw", playerId: myPlayerId }));
   }
 
-  function handleEndTurn() {
-    if (!myTurn) return;
-    persist(applyMove(state!, { type: "endTurn", playerId: myPlayerId }));
-  }
-
   if (state.winner) {
     const iWon = state.winner === myPlayerId;
     return (
@@ -159,18 +154,11 @@ export function PrsiGame({
         </p>
       </div>
 
-      {myTurn && (
-        <div className="flex justify-center gap-2">
-          {!canPlaySomething && !state.justDrew && (
-            <Button onClick={handleDraw}>
-              Lízni {state.pendingDraw > 0 ? state.pendingDraw : "1"} kartu/y
-            </Button>
-          )}
-          {state.justDrew && (
-            <Button variant="outline" onClick={handleEndTurn}>
-              Ukončit tah
-            </Button>
-          )}
+      {myTurn && !canPlaySomething && (
+        <div className="flex justify-center">
+          <Button onClick={handleDraw}>
+            Lízni {state.pendingDraw > 0 ? state.pendingDraw : "1"} kartu/y
+          </Button>
         </div>
       )}
 

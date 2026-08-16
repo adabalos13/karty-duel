@@ -27,10 +27,12 @@ Po každé změně kódu MUSÍŠ aktualizovat:
 - Mobile-first: každá nová komponenta se navrhuje nejdřív pro mobilní šířku, pak se rozšiřuje breakpointy nahoru
 
 ## Pravidla Prší — NEMĚNIT bez potvrzení od Adama
+- České karty: Žaludy, Zelené, Červené, Kule (NE francouzský žolíkový balíček srdce/káry/kříže/piky)
 - 7 = líznutí 2, stackovatelné
 - Eso = stop / u 2 hráčů = hraj znovu
-- Svršek (Q) = mění barvu
-- Spodek (J) = žádný efekt
+- Svršek = mění barvu
+- Spodek = žádný efekt
+- Líznutí (povinné i dobrovolné) VŽDY rovnou ukončí tah — žádné "zahraj taženou kartu" ani tlačítko na ukončení tahu
 Kompletní pravidla viz `PRD.md`.
 
 ## Workflow pro nové funkce

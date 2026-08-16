@@ -1,18 +1,29 @@
 import { cn } from "@/lib/utils";
-import type { Card, Suit } from "@/lib/game-engine/types";
+import type { Card, Rank, Suit } from "@/lib/game-engine/types";
 
 const SUIT_SYMBOL: Record<Suit, string> = {
-  hearts: "♥",
-  diamonds: "♦",
-  clubs: "♣",
-  spades: "♠",
+  zaludy: "🌰",
+  zelene: "🍃",
+  cervene: "♥",
+  kule: "🔔",
 };
 
 const SUIT_COLOR: Record<Suit, string> = {
-  hearts: "text-red-600 dark:text-red-400",
-  diamonds: "text-red-600 dark:text-red-400",
-  clubs: "text-foreground",
-  spades: "text-foreground",
+  zaludy: "text-amber-800 dark:text-amber-500",
+  zelene: "text-green-700 dark:text-green-400",
+  cervene: "text-red-600 dark:text-red-400",
+  kule: "text-rose-600 dark:text-rose-400",
+};
+
+const RANK_LABEL: Record<Rank, string> = {
+  "7": "7",
+  "8": "8",
+  "9": "9",
+  "10": "10",
+  J: "Sp", // Spodek
+  Q: "Sv", // Svršek
+  K: "Kr", // Král
+  A: "Es", // Eso
 };
 
 interface PlayingCardProps {
@@ -54,7 +65,7 @@ export function PlayingCard({
         className,
       )}
     >
-      <span className="text-xs sm:text-sm">{card.rank}</span>
+      <span className="text-xs sm:text-sm">{RANK_LABEL[card.rank]}</span>
       <span className="text-base leading-none sm:text-lg">{SUIT_SYMBOL[card.suit]}</span>
     </button>
   );

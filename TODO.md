@@ -23,9 +23,11 @@
 ## Fáze 2: Herní engine + Prší
 - [x] Obecný engine: balíček, míchání, rozdání, střídání tahů, detekce konce (`src/lib/game-engine/`)
 - [x] Pravidla Prší (7 stackovatelné, eso = extra tah, svršek = změna barvy, spodek bez efektu) — ověřeno testy i ručně ve dvou oknech
-- [x] Herní UI: ruka, lícovka, tah karty, líznutí, "Ukončit tah", výběr barvy u svršku (`src/components/game/PrsiGame.tsx`)
+- [x] Herní UI: ruka, lícovka, tah karty, líznutí, výběr barvy u svršku (`src/components/game/PrsiGame.tsx`)
 - [x] Synchronizace tahů přes Supabase Realtime — ověřeno živě mezi dvěma okny
 - [x] Zobrazení vítěze + "Hrát znovu" (přegeneruje stav ve stejné místnosti)
+- [x] Úprava dle zpětné vazby: líznutí vždy rovnou ukončí tah (odstraněno tlačítko "Ukončit tah")
+- [x] Úprava dle zpětné vazby: české karty (žaludy/zelené/červené/kule) místo francouzských symbolů
 
 ## Fáze 3: Uno
 - [ ] Pravidla Uno na stejném enginu

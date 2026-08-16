@@ -1,6 +1,6 @@
 import type { Card, Rank, Suit } from "./types";
 
-const SUITS: Suit[] = ["hearts", "diamonds", "clubs", "spades"];
+const SUITS: Suit[] = ["zaludy", "zelene", "cervene", "kule"];
 const RANKS: Rank[] = ["7", "8", "9", "10", "J", "Q", "K", "A"];
 
 export function buildDeck(): Card[] {

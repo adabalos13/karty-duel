@@ -21,7 +21,7 @@ Dva hráči — Adam a Káťa. Žádné publikum, žádné účty třetích stra
 - Synchronizace stavu hry mezi oběma hráči v reálném čase (Supabase Realtime)
 
 ### 3. Prší
-32 karet, 4 barvy (srdce, káry, kříže, piky), hodnoty 7, 8, 9, 10, J, Q, K, A.
+32 karet, **4 české barvy: Žaludy 🌰, Zelené 🍃 (listy), Červené ♥ (srdce), Kule 🔔** — ne francouzský žolíkový balíček. Hodnoty 7, 8, 9, 10, Spodek, Svršek, Král, Eso.
 
 **Cíl:** zbavit se všech karet jako první.
 
@@ -31,11 +31,11 @@ Dva hráči — Adam a Káťa. Žádné publikum, žádné účty třetích stra
 | Karta | Efekt |
 |---|---|
 | **7** | Další hráč lízne 2 karty z balíčku. Dá se stackovat — pokud má i druhý hráč 7, může ji přihodit a poslat "dluh" zpět místo lízání. |
-| **Eso (A)** | Druhý hráč má stop (u 2 hráčů to znamená: hráč, co eso zahrál, hraje hned znovu). |
-| **Svršek (Q)** | Mění barvu — hráč, co ho zahrál, řekne, jaká barva se hraje dál. |
-| **Spodek (J)** | Žádný speciální efekt, hraje se jako normální karta (musí sednout barvou/hodnotou). |
+| **Eso** | Druhý hráč má stop (u 2 hráčů to znamená: hráč, co eso zahrál, hraje hned znovu). |
+| **Svršek** | Mění barvu — hráč, co ho zahrál, řekne, jaká barva se hraje dál. |
+| **Spodek** | Žádný speciální efekt, hraje se jako normální karta (musí sednout barvou/hodnotou). |
 
-**Nemůžeš hrát?** Lízneš 1 kartu z balíčku. Pokud je hratelná, můžeš ji hned zahrát (upřesní se v Fázi 2, defaultně ano — konzistentní s většinou domácích pravidel).
+**Nemůžeš hrát?** Lízneš kartu z balíčku (1, nebo víc při dluhu ze sedmiček) a **tím tvůj tah končí** — i kdyby byla tažená karta hratelná, nezahraješ ji hned, tah automaticky přechází na soupeře.
 
 ### 4. Uno
 Standardní pravidla (108 karet, barvy červená/žlutá/zelená/modrá 0-9, Skip, Reverse, Draw Two, Wild, Wild Draw Four). Case bez speciálních house rules — pokud Adam a Káťa chtějí odchylku, upřesní se před Fází 3.

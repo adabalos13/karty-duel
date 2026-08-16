@@ -18,7 +18,6 @@ export function createInitialPrsiState(playerIds: [string, string]): PrsiState {
     turn: playerIds[0],
     currentSuit: firstDiscard.suit,
     pendingDraw: 0,
-    justDrew: false,
     winner: null,
     playerOrder: playerIds,
   };
@@ -74,7 +73,6 @@ export function applyMove(state: PrsiState, move: PrsiMove): PrsiState {
         hands: newHands,
         discard: newDiscard,
         winner: move.playerId,
-        justDrew: false,
       };
     }
 
@@ -84,7 +82,6 @@ export function applyMove(state: PrsiState, move: PrsiMove): PrsiState {
       hands: newHands,
       discard: newDiscard,
       currentSuit: newSuit,
-      justDrew: false,
     };
 
     if (move.card.rank === "7") {
@@ -102,6 +99,8 @@ export function applyMove(state: PrsiState, move: PrsiMove): PrsiState {
   }
 
   if (move.type === "draw") {
+    // Líznutí (ať povinné kvůli sedmičkám nebo protože hráč nemá co hrát)
+    // vždy ukončí tah a předá ho soupeři.
     const amount = state.pendingDraw > 0 ? state.pendingDraw : 1;
     const reshuffled = reshuffleIfNeeded(state, amount);
     const drawn = reshuffled.deck.slice(0, amount);
@@ -109,27 +108,13 @@ export function applyMove(state: PrsiState, move: PrsiMove): PrsiState {
     const hand = reshuffled.hands[move.playerId] ?? [];
     const newHands = { ...reshuffled.hands, [move.playerId]: [...hand, ...drawn] };
 
-    if (state.pendingDraw > 0) {
-      return {
-        ...reshuffled,
-        deck: remainingDeck,
-        hands: newHands,
-        pendingDraw: 0,
-        justDrew: false,
-        turn: otherPlayer(state, move.playerId),
-      };
-    }
     return {
       ...reshuffled,
       deck: remainingDeck,
       hands: newHands,
-      justDrew: true,
+      pendingDraw: 0,
+      turn: otherPlayer(state, move.playerId),
     };
-  }
-
-  if (move.type === "endTurn") {
-    if (!state.justDrew) return state;
-    return { ...state, justDrew: false, turn: otherPlayer(state, move.playerId) };
   }
 
   return state;
