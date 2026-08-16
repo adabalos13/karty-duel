@@ -28,6 +28,7 @@
 - [x] Zobrazení vítěze + "Hrát znovu" (přegeneruje stav ve stejné místnosti)
 - [x] Úprava dle zpětné vazby: líznutí vždy rovnou ukončí tah (odstraněno tlačítko "Ukončit tah")
 - [x] Úprava dle zpětné vazby: české karty (žaludy/zelené/červené/kule) místo francouzských symbolů
+- [x] Vlastní grafika karet (AI-generované ikony barev + ilustrace Spodek/Svršek/Král/Eso) — viz `public/cards/` a `scripts/process-card-art.py`
 
 ## Fáze 3: Uno
 - [ ] Pravidla Uno na stejném enginu

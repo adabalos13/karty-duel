@@ -1,13 +1,6 @@
 import { cn } from "@/lib/utils";
 import type { Card, Rank, Suit } from "@/lib/game-engine/types";
 
-const SUIT_SYMBOL: Record<Suit, string> = {
-  zaludy: "🌰",
-  zelene: "🍃",
-  cervene: "♥",
-  kule: "🔔",
-};
-
 const SUIT_COLOR: Record<Suit, string> = {
   zaludy: "text-amber-800 dark:text-amber-500",
   zelene: "text-green-700 dark:text-green-400",
@@ -25,6 +18,8 @@ const RANK_LABEL: Record<Rank, string> = {
   K: "Kr", // Král
   A: "Es", // Eso
 };
+
+const FACE_RANKS: Rank[] = ["J", "Q", "K", "A"];
 
 interface PlayingCardProps {
   card?: Card;
@@ -52,21 +47,40 @@ export function PlayingCard({
     );
   }
 
+  const isFaceCard = FACE_RANKS.includes(card.rank);
+
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={!onClick || disabled}
       className={cn(
-        "flex h-16 w-11 shrink-0 flex-col items-center justify-center gap-0.5 rounded-md border bg-background font-semibold shadow-sm transition-transform sm:h-20 sm:w-14",
+        "relative flex h-16 w-11 shrink-0 flex-col items-center justify-center gap-0.5 overflow-hidden rounded-md border bg-background font-semibold shadow-sm transition-transform sm:h-20 sm:w-14",
         onClick && !disabled && "cursor-pointer hover:-translate-y-1",
         disabled && "opacity-40",
-        SUIT_COLOR[card.suit],
         className,
       )}
     >
-      <span className="text-xs sm:text-sm">{RANK_LABEL[card.rank]}</span>
-      <span className="text-base leading-none sm:text-lg">{SUIT_SYMBOL[card.suit]}</span>
+      {isFaceCard ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={`/cards/face-${card.suit}-${card.rank}.png`}
+          alt={`${RANK_LABEL[card.rank]} ${card.suit}`}
+          className="h-full w-full object-cover"
+        />
+      ) : (
+        <>
+          <span className={cn("text-xs sm:text-sm", SUIT_COLOR[card.suit])}>
+            {RANK_LABEL[card.rank]}
+          </span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={`/cards/suit-${card.suit}.png`}
+            alt={card.suit}
+            className="h-6 w-6 object-contain sm:h-8 sm:w-8"
+          />
+        </>
+      )}
     </button>
   );
 }

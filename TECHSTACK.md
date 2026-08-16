@@ -37,8 +37,19 @@ karty-duel/
 │   └── types/
 ├── supabase/
 │   └── schema.sql
+├── public/cards/                    # grafika karet (viz níže)
+├── scripts/process-card-art.py      # zpracování AI-generované grafiky do public/cards/
 └── ...
 ```
+
+## Grafika karet
+Ikony barev (`suit-{zaludy,zelene,cervene,kule}.png`) a ilustrace figur
+(`face-{barva}-{J,Q,K,A}.png`, J=Spodek, Q=Svršek, K=Král, A=Eso) jsou
+AI-generované (ChatGPT), ořezané a zprůhledněné skriptem
+`scripts/process-card-art.py`. Číselné karty (7–10) používají suit ikonu +
+text, karty J/Q/K/A zobrazují celou ilustraci. Chceš-li grafiku vyměnit,
+vygeneruj nový zdrojový obrázek ve stejném rozvržení (řada = barva, sloupec
+= Spodek/Svršek/Král/Eso) a uprav cesty ve skriptu.
 
 ## Databázové schéma
 ```sql
