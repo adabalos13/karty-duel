@@ -8,16 +8,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/lib/supabase/client";
 import { generateRoomCode } from "@/lib/room-code";
-import { getSavedName, saveName, savePlayerId } from "@/lib/local-identity";
-import type { GameType } from "@/types/game";
+import { savePlayerId } from "@/lib/local-identity";
 
 type Mode = "choose" | "create" | "join";
+
+// Uno zatím není hotové - dokud na něm nezačneme pracovat, appka vytváří
+// jen místnosti pro Prší.
+const GAME_TYPE = "prsi";
 
 export default function HomePage() {
   const router = useRouter();
   const [mode, setMode] = useState<Mode>("choose");
-  const [name, setName] = useState(() => getSavedName());
-  const [gameType, setGameType] = useState<GameType>("prsi");
+  const [name, setName] = useState("");
   const [joinCode, setJoinCode] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -35,7 +37,7 @@ export default function HomePage() {
         const code = generateRoomCode();
         const { data, error: insertError } = await supabase
           .from("rooms")
-          .insert({ code, game_type: gameType })
+          .insert({ code, game_type: GAME_TYPE })
           .select("id, code")
           .single();
         if (!insertError) {
@@ -54,7 +56,6 @@ export default function HomePage() {
         .single();
       if (playerError) throw playerError;
 
-      saveName(name.trim());
       savePlayerId(room.code, player.id);
       router.push(`/hra/${room.code}`);
     } catch (err) {
@@ -92,7 +93,6 @@ export default function HomePage() {
         .single();
       if (playerError) throw playerError;
 
-      saveName(name.trim());
       savePlayerId(room.code, player.id);
       router.push(`/hra/${room.code}`);
     } catch (err) {
@@ -130,27 +130,6 @@ export default function HomePage() {
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Tvoje jméno"
                 />
-              </div>
-              <div className="flex flex-col gap-2">
-                <Label>Hra</Label>
-                <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant={gameType === "prsi" ? "default" : "outline"}
-                    className="flex-1"
-                    onClick={() => setGameType("prsi")}
-                  >
-                    Prší
-                  </Button>
-                  <Button
-                    type="button"
-                    variant={gameType === "uno" ? "default" : "outline"}
-                    className="flex-1"
-                    onClick={() => setGameType("uno")}
-                  >
-                    Uno
-                  </Button>
-                </div>
               </div>
               {error && <p className="text-sm text-destructive">{error}</p>}
               <div className="flex gap-2">

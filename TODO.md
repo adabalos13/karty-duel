@@ -37,16 +37,22 @@
 - [x] Úprava dle zpětné vazby: výrazně zvětšené karty/pipsy pro mobil
 - [x] Úprava dle zpětné vazby: bez přednastaveného jména (generický placeholder), aby appku mohl hrát kdokoliv
 - [x] Úprava dle zpětné vazby: vyslovitelné kódy místností (souhláska-samohláska-souhláska-samohláska, `src/lib/room-code.ts`)
+- [x] Úprava dle zpětné vazby: pipsy 3-1-3 pro lichá čísla (VII, IX), sudá zůstávají 2 sloupce
+- [x] Úprava dle zpětné vazby: jméno se vůbec nepamatuje mezi návštěvami (odstraněno z `local-identity.ts`)
+- [x] Úprava dle zpětné vazby: tlačítko "Opustit hru" — trvalý odkaz zpět na úvod v hlavičce místnosti
+- [x] Úprava dle zpětné vazby: nehratelné karty se nezešedivují, jen krátká hláška po kliknutí
+- [x] Uno dočasně schované v UI (jen Prší lze založit), dokud nezačneme na Unu pracovat
 
 ## Fáze 3: Uno
 - [ ] Pravidla Uno na stejném enginu
 - [ ] Herní UI pro Uno (barvy, speciální karty)
-- [ ] Výběr hry v lobby (Prší / Uno) funguje pro obě
+- [ ] Vrátit výběr hry v lobby (Prší / Uno) — teď schovaný v `page.tsx` (`GAME_TYPE` konstanta)
 
 ## Fáze 4: Polish
 - [ ] Animace tahů
 - [ ] Reconnect po výpadku spojení
 - [ ] Doladění mobilního UI (menší detaily, ne základní responsivita — ta je hotová od Fáze 1)
+- [ ] Průběžné skóre napříč koly ve stejné místnosti (přežije "Hrát znovu") — nutno domluvit: skóre zvlášť pro Prší/Uno, nebo dohromady? + tlačítko na reset
 
 ## Fáze 5: Finální deploy a test
 - [ ] Reálná partie Adam vs. Káťa přes internet (po dokončení Fáze 2/3)

@@ -40,6 +40,13 @@ export function PrsiGame({
 }: PrsiGameProps) {
   const [state, setState] = useState<PrsiState | null>(null);
   const [pendingSuitCard, setPendingSuitCard] = useState<Card | null>(null);
+  const [invalidMessage, setInvalidMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!invalidMessage) return;
+    const timeout = setTimeout(() => setInvalidMessage(null), 1800);
+    return () => clearTimeout(timeout);
+  }, [invalidMessage]);
 
   useEffect(() => {
     let active = true;
@@ -92,6 +99,11 @@ export function PrsiGame({
 
   function handleCardClick(card: Card) {
     if (!myTurn) return;
+    if (!isCardPlayable(state!, card)) {
+      setInvalidMessage("Tuhle kartu teď nemůžeš zahrát.");
+      return;
+    }
+    setInvalidMessage(null);
     if (card.rank === "Q") {
       setPendingSuitCard(card);
       return;
@@ -158,6 +170,9 @@ export function PrsiGame({
         <p className="text-sm font-medium">
           {myTurn ? "Jsi na tahu" : `Na tahu: ${playerNames[state.turn]}`}
         </p>
+        {invalidMessage && (
+          <p className="text-xs text-destructive">{invalidMessage}</p>
+        )}
       </div>
 
       {myTurn && state.pendingSkip && (
@@ -181,12 +196,8 @@ export function PrsiGame({
           <PlayingCard
             key={`${card.suit}-${card.rank}-${i}`}
             card={card}
-            disabled={!myTurn || !isCardPlayable(state, card)}
-            onClick={
-              myTurn && isCardPlayable(state, card)
-                ? () => handleCardClick(card)
-                : undefined
-            }
+            disabled={!myTurn}
+            onClick={myTurn ? () => handleCardClick(card) : undefined}
           />
         ))}
       </div>

@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/lib/supabase/client";
-import { getPlayerId, getSavedName, saveName, savePlayerId } from "@/lib/local-identity";
+import { getPlayerId, savePlayerId } from "@/lib/local-identity";
 import { createInitialPrsiState } from "@/lib/game-engine/prsi";
 import { PrsiGame } from "@/components/game/PrsiGame";
 import type { Player, Room } from "@/types/game";
@@ -28,7 +28,7 @@ export default function RoomPage() {
   const [myPlayerId, setMyPlayerId] = useState<string | null>(null);
   const [gameId, setGameId] = useState<string | null>(null);
   const [notFound, setNotFound] = useState(false);
-  const [joinName, setJoinName] = useState(() => getSavedName());
+  const [joinName, setJoinName] = useState("");
   const [joining, setJoining] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -122,7 +122,6 @@ export default function RoomPage() {
         .single();
       if (playerError) throw playerError;
 
-      saveName(joinName.trim());
       savePlayerId(roomCode, player.id);
       setMyPlayerId(player.id);
       await loadPlayers(room.id);
@@ -202,6 +201,12 @@ export default function RoomPage() {
             <CardTitle className="text-2xl">{roomCode}</CardTitle>
             <Badge variant="secondary">{GAME_LABEL[room.game_type]}</Badge>
           </div>
+          <Link
+            href="/"
+            className="text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
+          >
+            ← Opustit hru
+          </Link>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           {!iAmIn && room.status === "waiting" && (

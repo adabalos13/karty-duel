@@ -9,11 +9,12 @@ Dva hráči kdokoliv (vzniklo pro Adama a Káťu, ale appka není na ně natvrdo
 ## Klíčové funkce
 
 ### 1. Lobby / místnost
-- Vytvoření místnosti: zadání jména, výběr hry (Prší / Uno), vygenerování krátkého `room_code` a odkazu ke sdílení
+- Vytvoření místnosti: zadání jména, vygenerování krátkého `room_code` a odkazu ke sdílení. Výběr hry (Prší/Uno) je v UI dočasně schovaný — appka zatím vždy zakládá Prší, dokud nezačneme pracovat na Unu (viz Fáze 3)
 - `room_code` má formát souhláska-samohláska-souhláska-samohláska (např. `hoka`, `kico`) — snadno se nahlas nadiktuje druhému hráči, i když každý hraje na svém mobilu vedle sebe
-- Připojení do místnosti: zadání jména + kódu (nebo přímo přes odkaz)
+- Připojení do místnosti: zadání jména + kódu (nebo přímo přes odkaz). Jméno se NIKDY nepředvyplňuje (appku hraje kdokoliv, ne natvrdo Adam/Káťa)
 - Zobrazení, kdo je v místnosti připojený (real-time, bez refreshe)
 - Host spustí hru tlačítkem "Začít hru"
+- Trvalý odkaz "Opustit hru" zpět na úvod — nemaže hráče z místnosti, lze se vrátit stejným odkazem
 
 ### 2. Herní engine (sdílený pro obě hry)
 - Balíček karet, míchání, rozdání
@@ -38,7 +39,9 @@ Dva hráči kdokoliv (vzniklo pro Adama a Káťu, ale appka není na ně natvrdo
 
 **Líznutí je vždy dobrovolné** — i když máš hratelnou kartu, můžeš se rozhodnout radši líznout (např. abys nemusel zahrát nevýhodnou kartu). Líznutí (ať povinné, nebo dobrovolné) **vždy rovnou končí tvůj tah** — i kdyby byla tažená karta hratelná, nezahraješ ji hned, tah automaticky přechází na soupeře.
 
-**Vzhled karet 7-10:** karta zobrazuje skutečný počet ikon barvy (pipsy, jako na klasickém balíčku), ne jen jednu ikonu + číslo. Číslo v rohu je psané římskými číslicemi (VII, VIII, IX, X) pro rychlou orientaci.
+**Vzhled karet 7-10:** karta zobrazuje skutečný počet ikon barvy (pipsy, jako na klasickém balíčku), ne jen jednu ikonu + číslo. Sudé počty (VIII, X) ve dvou rovnoměrných sloupcích, liché (VII, IX) jako N-1-N se středovým pipsem (např. VII = 3-1-3). Číslo v rohu je psané římskými číslicemi (VII, VIII, IX, X) pro rychlou orientaci.
+
+**Zvýrazňování karet — záměrně NE:** appka nezešedivuje karty, které teď nejdou zahrát — všechny karty v ruce vypadají stejně, hráč musí sám poznat, jestli karta sedí (jako u fyzického balíčku). Klik na nehratelnou kartu nic nezmění, jen se na chvíli zobrazí hláška "Tuhle kartu teď nemůžeš zahrát." Když není tvůj tah, celá ruka je ztlumená (to je jen stavová informace, ne nápověda k pravidlům).
 
 ### 4. Uno
 Standardní pravidla (108 karet, barvy červená/žlutá/zelená/modrá 0-9, Skip, Reverse, Draw Two, Wild, Wild Draw Four). Case bez speciálních house rules — pokud Adam a Káťa chtějí odchylku, upřesní se před Fází 3.
@@ -60,7 +63,7 @@ Standardní pravidla (108 karet, barvy červená/žlutá/zelená/modrá 0-9, Ski
 - **Responsivní od základu** — plně funkční na mobilním prohlížeči i desktopu (typicky jeden hráč na mobilu, druhý na PC)
 - Jazyk UI: čeština
 - Vzhled: jednoduchý a čistý (neutrální shadcn styl, světlý/tmavý režim dle systému), čitelné karty, minimum ozdob
-- Žádná autentizace — jen jméno hráče uložené v localStorage
+- Žádná autentizace — v localStorage se ukládá jen `player_id` per místnost (pro znovupřipojení po refreshi), jméno hráče se NEPAMATUJE mezi návštěvami
 
 ## Fáze
 1. Setup + lobby s realtime spojením

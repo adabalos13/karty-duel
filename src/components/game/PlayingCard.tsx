@@ -51,6 +51,28 @@ function PipColumn({ suit, count }: { suit: Suit; count: number }) {
   );
 }
 
+function PipLayout({ suit, count }: { suit: Suit; count: number }) {
+  // Liché počty (7, 9) se skládají jako na klasickém balíčku: N-1-N
+  // se středovým pipsem, sudé (8, 10) jako dva rovnoměrné sloupce.
+  if (count % 2 === 1) {
+    const side = (count - 1) / 2;
+    return (
+      <div className="flex items-center gap-1">
+        <PipColumn suit={suit} count={side} />
+        <PipColumn suit={suit} count={1} />
+        <PipColumn suit={suit} count={side} />
+      </div>
+    );
+  }
+  const side = count / 2;
+  return (
+    <div className="flex gap-1">
+      <PipColumn suit={suit} count={side} />
+      <PipColumn suit={suit} count={side} />
+    </div>
+  );
+}
+
 export function PlayingCard({
   card,
   onClick,
@@ -101,12 +123,7 @@ export function PlayingCard({
           >
             {RANK_LABEL[card.rank]}
           </span>
-          {pipCount ? (
-            <div className="flex gap-1">
-              <PipColumn suit={card.suit} count={Math.ceil(pipCount / 2)} />
-              <PipColumn suit={card.suit} count={Math.floor(pipCount / 2)} />
-            </div>
-          ) : null}
+          {pipCount ? <PipLayout suit={card.suit} count={pipCount} /> : null}
         </>
       )}
     </button>
