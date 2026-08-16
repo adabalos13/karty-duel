@@ -1,0 +1,227 @@
+"use client";
+
+import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { supabase } from "@/lib/supabase/client";
+import { getPlayerId, getSavedName, saveName, savePlayerId } from "@/lib/local-identity";
+import type { Player, Room } from "@/types/game";
+
+const GAME_LABEL: Record<Room["game_type"], string> = {
+  prsi: "Prší",
+  uno: "Uno",
+};
+
+export default function RoomPage() {
+  const params = useParams<{ roomCode: string }>();
+  const roomCode = params.roomCode.toUpperCase();
+
+  const [room, setRoom] = useState<Room | null>(null);
+  const [players, setPlayers] = useState<Player[]>([]);
+  const [myPlayerId, setMyPlayerId] = useState<string | null>(null);
+  const [notFound, setNotFound] = useState(false);
+  const [joinName, setJoinName] = useState(() => getSavedName());
+  const [joining, setJoining] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const loadPlayers = useCallback(async (roomId: string) => {
+    const { data } = await supabase
+      .from("players")
+      .select("*")
+      .eq("room_id", roomId)
+      .order("joined_at", { ascending: true });
+    if (data) setPlayers(data);
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+
+    async function init() {
+      const { data: roomData } = await supabase
+        .from("rooms")
+        .select("*")
+        .eq("code", roomCode)
+        .maybeSingle();
+
+      if (!active) return;
+      if (!roomData) {
+        setNotFound(true);
+        return;
+      }
+      setRoom(roomData);
+      setMyPlayerId(getPlayerId(roomCode));
+      await loadPlayers(roomData.id);
+
+      const channel = supabase
+        .channel(`room:${roomData.id}`)
+        .on(
+          "postgres_changes",
+          { event: "*", schema: "public", table: "players", filter: `room_id=eq.${roomData.id}` },
+          () => loadPlayers(roomData.id),
+        )
+        .on(
+          "postgres_changes",
+          { event: "UPDATE", schema: "public", table: "rooms", filter: `id=eq.${roomData.id}` },
+          (payload) => setRoom(payload.new as Room),
+        )
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
+    }
+
+    const cleanupPromise = init();
+    return () => {
+      active = false;
+      cleanupPromise.then((cleanup) => cleanup?.());
+    };
+  }, [roomCode, loadPlayers]);
+
+  async function handleJoin() {
+    if (!room) return;
+    if (!joinName.trim()) {
+      setError("Zadej jméno.");
+      return;
+    }
+    setJoining(true);
+    setError(null);
+    try {
+      const { data: player, error: playerError } = await supabase
+        .from("players")
+        .insert({ room_id: room.id, name: joinName.trim() })
+        .select("id")
+        .single();
+      if (playerError) throw playerError;
+
+      saveName(joinName.trim());
+      savePlayerId(roomCode, player.id);
+      setMyPlayerId(player.id);
+      await loadPlayers(room.id);
+    } catch (err) {
+      console.error(err);
+      setError("Něco se nepovedlo. Zkus to prosím znovu.");
+    } finally {
+      setJoining(false);
+    }
+  }
+
+  async function handleStart() {
+    if (!room) return;
+    await supabase.from("rooms").update({ status: "playing" }).eq("id", room.id);
+  }
+
+  const shareUrl =
+    typeof window !== "undefined" ? `${window.location.origin}/hra/${roomCode}` : "";
+
+  async function copyLink() {
+    await navigator.clipboard.writeText(shareUrl);
+  }
+
+  if (notFound) {
+    return (
+      <main className="flex flex-1 items-center justify-center p-4">
+        <Card className="w-full max-w-sm">
+          <CardContent className="pt-6 text-center">
+            <p>Místnost {roomCode} neexistuje.</p>
+            <Link href="/" className={buttonVariants({ className: "mt-4" })}>
+              Zpět na úvod
+            </Link>
+          </CardContent>
+        </Card>
+      </main>
+    );
+  }
+
+  if (!room) {
+    return (
+      <main className="flex flex-1 items-center justify-center p-4">
+        <p className="text-muted-foreground">Načítám…</p>
+      </main>
+    );
+  }
+
+  const isHost = players[0]?.id === myPlayerId;
+  const iAmIn = players.some((p) => p.id === myPlayerId);
+
+  return (
+    <main className="flex flex-1 items-center justify-center p-4">
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <div className="flex items-center justify-between gap-2">
+            <CardTitle className="text-2xl tracking-widest">{roomCode}</CardTitle>
+            <Badge variant="secondary">{GAME_LABEL[room.game_type]}</Badge>
+          </div>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-4">
+          {!iAmIn && (
+            <div className="flex flex-col gap-3 rounded-md border p-3">
+              <Label htmlFor="join-name">Tvoje jméno</Label>
+              <Input
+                id="join-name"
+                value={joinName}
+                onChange={(e) => setJoinName(e.target.value)}
+                placeholder="Jméno"
+              />
+              {error && <p className="text-sm text-destructive">{error}</p>}
+              <Button onClick={handleJoin} disabled={joining}>
+                {joining ? "Připojuji…" : "Připojit se do místnosti"}
+              </Button>
+            </div>
+          )}
+
+          <div>
+            <p className="mb-2 text-sm font-medium text-muted-foreground">
+              Hráči ({players.length}/2)
+            </p>
+            <ul className="flex flex-col gap-2">
+              {players.map((p) => (
+                <li
+                  key={p.id}
+                  className="flex items-center justify-between rounded-md border px-3 py-2"
+                >
+                  <span>{p.name}</span>
+                  {p.id === myPlayerId && (
+                    <Badge variant="outline">ty</Badge>
+                  )}
+                </li>
+              ))}
+              {players.length === 0 && (
+                <li className="text-sm text-muted-foreground">Zatím nikdo.</li>
+              )}
+            </ul>
+          </div>
+
+          {room.status === "waiting" && iAmIn && (
+            <div className="flex flex-col gap-2">
+              <Button variant="outline" onClick={copyLink}>
+                Zkopírovat odkaz na místnost
+              </Button>
+              {isHost && (
+                <Button onClick={handleStart} disabled={players.length < 2}>
+                  {players.length < 2 ? "Čekám na druhého hráče…" : "Začít hru"}
+                </Button>
+              )}
+              {!isHost && (
+                <p className="text-center text-sm text-muted-foreground">
+                  Čekám, až hru spustí host…
+                </p>
+              )}
+            </div>
+          )}
+
+          {room.status === "playing" && (
+            <p className="text-center text-sm text-muted-foreground">
+              Hra běží — samotné {GAME_LABEL[room.game_type]} UI přijde ve Fázi 2.
+            </p>
+          )}
+        </CardContent>
+      </Card>
+    </main>
+  );
+}

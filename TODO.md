@@ -10,13 +10,14 @@
 - [x] Git init + GitHub repo (adabalos13/karty-duel, veřejné)
 - [x] shadcn/ui init + základní komponenty (button, card, dialog, input, label, badge)
 - [x] PRD.md, TECHSTACK.md, CLAUDE.md, TODO.md
-- [ ] 🔥 Supabase projekt (Adam založí ručně na supabase.com) + `.env.local`
-- [ ] `supabase/schema.sql` (rooms, players, games) + aplikace schématu
-- [ ] Úvodní stránka: vytvořit místnost (jméno, výběr hry, room code)
-- [ ] Připojení do místnosti přes odkaz/kód
-- [ ] Real-time zobrazení "kdo je v místnosti" (bez refreshe)
-- [ ] Ověřit real-time funguje mezi dvěma zařízeními (mobil + desktop)
-- [ ] `npm run build` prochází, commit
+- [x] Supabase projekt + `.env.local`
+- [x] `supabase/schema.sql` (rooms, players, games) + aplikace schématu
+- [x] Úvodní stránka: vytvořit místnost (jméno, výběr hry, room code)
+- [x] Připojení do místnosti přes odkaz/kód
+- [x] Real-time zobrazení "kdo je v místnosti" (bez refreshe) — ověřeno ve dvou tabech
+- [x] Responzivní layout ověřen na mobilní šířce (375px)
+- [x] `npm run build` a `npm run lint` prochází, commit
+- [ ] Ověřit real-time i na reálném druhém zařízení (ne jen dva taby) — vyzkoušet s Kátou před Fází 2
 
 ## Fáze 2: Herní engine + Prší
 - [ ] Obecný engine: balíček, míchání, rozdání, střídání tahů, detekce konce
