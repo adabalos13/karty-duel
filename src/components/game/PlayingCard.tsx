@@ -30,6 +30,7 @@ const PIP_COUNT: Partial<Record<Rank, number>> = {
 interface PlayingCardProps {
   card?: Card;
   onClick?: () => void;
+  onPress?: () => void;
   disabled?: boolean;
   selected?: boolean;
   faceDown?: boolean;
@@ -45,7 +46,7 @@ function PipColumn({ suit, count }: { suit: Suit; count: number }) {
           key={i}
           src={`/cards/suit-${suit}.png`}
           alt=""
-          className="h-[15px] w-[15px] object-contain sm:h-[18px] sm:w-[18px]"
+          className="h-4 w-4 object-contain sm:h-5 sm:w-5"
         />
       ))}
     </div>
@@ -77,6 +78,7 @@ function PipLayout({ suit, count }: { suit: Suit; count: number }) {
 export function PlayingCard({
   card,
   onClick,
+  onPress,
   disabled,
   selected,
   faceDown,
@@ -100,14 +102,20 @@ export function PlayingCard({
     <button
       type="button"
       onClick={onClick}
+      onPointerDown={(event) => {
+        if (!onClick || disabled) return;
+        if (event.pointerType === "mouse" && event.button !== 0) return;
+        onPress?.();
+      }}
       disabled={!onClick || disabled}
+      aria-pressed={selected}
       className={cn(
-        "relative flex h-28 w-20 shrink-0 flex-col items-center justify-center overflow-hidden rounded-lg border bg-background font-semibold shadow-sm transition-[transform,box-shadow,background-color] duration-150 touch-manipulation sm:h-32 sm:w-24",
+        "relative flex h-28 w-20 shrink-0 flex-col items-center justify-center overflow-hidden rounded-lg border bg-background font-semibold shadow-sm transition-[transform,box-shadow,background-color] duration-150 touch-manipulation [-webkit-tap-highlight-color:transparent] sm:h-32 sm:w-24",
         onClick &&
           !disabled &&
-          "cursor-pointer hover:-translate-y-1 active:scale-[0.97] active:bg-accent/20 active:ring-2 active:ring-accent active:shadow-md",
+          "cursor-pointer hover:-translate-y-1 active:scale-[0.97] active:bg-accent/25 active:ring-2 active:ring-accent active:shadow-md",
         selected &&
-          "z-10 -translate-y-1.5 scale-[1.04] bg-accent/20 shadow-md ring-2 ring-accent",
+          "z-10 -translate-y-2 scale-[1.06] bg-accent/30 shadow-lg ring-2 ring-inset ring-accent",
         disabled && "opacity-40",
         className,
       )}

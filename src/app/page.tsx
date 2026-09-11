@@ -207,6 +207,9 @@ export default function HomePage() {
           )}
         </CardContent>
       </Card>
+      <p className="relative text-xs text-foreground/60">
+        České karty · místnost pro dva hráče
+      </p>
     </main>
   );
 }

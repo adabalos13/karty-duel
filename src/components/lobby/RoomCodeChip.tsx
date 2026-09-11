@@ -20,7 +20,7 @@ export function RoomCodeChip({
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-md border border-accent/50 bg-secondary font-mono font-semibold tracking-[0.22em] text-foreground lowercase shadow-sm",
+        "inline-flex items-center rounded-md border border-primary/25 bg-secondary font-mono font-semibold tracking-[0.22em] text-foreground lowercase shadow-sm",
         SIZE_CLASS[size],
         className,
       )}

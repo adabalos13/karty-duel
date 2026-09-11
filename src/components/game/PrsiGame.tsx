@@ -51,7 +51,7 @@ export function PrsiGame({
 
   useEffect(() => {
     if (!selectedCardKey || pendingSuitCard) return;
-    const timeout = setTimeout(() => setSelectedCardKey(null), 450);
+    const timeout = setTimeout(() => setSelectedCardKey(null), 900);
     return () => clearTimeout(timeout);
   }, [selectedCardKey, pendingSuitCard]);
 
@@ -211,6 +211,7 @@ export function PrsiGame({
             card={card}
             disabled={!myTurn}
             selected={selectedCardKey === cardKey(card, i)}
+            onPress={myTurn ? () => setSelectedCardKey(cardKey(card, i)) : undefined}
             onClick={myTurn ? () => handleCardClick(card, i) : undefined}
           />
         ))}

@@ -19,7 +19,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="cs" className={`${jakarta.variable} ${geistMono.variable} h-full antialiased`}>
+    <html
+      lang="cs"
+      translate="no"
+      className={`${jakarta.variable} ${geistMono.variable} h-full antialiased`}
+    >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
