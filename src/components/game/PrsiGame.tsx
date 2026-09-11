@@ -50,10 +50,10 @@ export function PrsiGame({
   }, [invalidMessage]);
 
   useEffect(() => {
-    if (!selectedCardKey || pendingSuitCard) return;
-    const timeout = setTimeout(() => setSelectedCardKey(null), 900);
+    if (!selectedCardKey || pendingSuitCard || !invalidMessage) return;
+    const timeout = setTimeout(() => setSelectedCardKey(null), 1400);
     return () => clearTimeout(timeout);
-  }, [selectedCardKey, pendingSuitCard]);
+  }, [selectedCardKey, pendingSuitCard, invalidMessage]);
 
   useEffect(() => {
     let active = true;
