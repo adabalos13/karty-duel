@@ -4,10 +4,13 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { BrandMark } from "@/components/lobby/BrandMark";
+import { LobbyAtmosphere } from "@/components/lobby/LobbyAtmosphere";
+import { RoomCodeChip } from "@/components/lobby/RoomCodeChip";
 import { supabase } from "@/lib/supabase/client";
 import { getPlayerId, savePlayerId } from "@/lib/local-identity";
 import { createInitialPrsiState } from "@/lib/game-engine/prsi";
@@ -31,6 +34,7 @@ export default function RoomPage() {
   const [joinName, setJoinName] = useState("");
   const [joining, setJoining] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState<"code" | "link" | null>(null);
 
   const loadPlayers = useCallback(async (roomId: string) => {
     const { data } = await supabase
@@ -161,17 +165,31 @@ export default function RoomPage() {
   const shareUrl =
     typeof window !== "undefined" ? `${window.location.origin}/hra/${roomCode}` : "";
 
+  async function markCopied(kind: "code" | "link") {
+    setCopied(kind);
+    window.setTimeout(() => setCopied((current) => (current === kind ? null : current)), 1600);
+  }
+
   async function copyLink() {
     await navigator.clipboard.writeText(shareUrl);
+    await markCopied("link");
+  }
+
+  async function copyCode() {
+    await navigator.clipboard.writeText(roomCode);
+    await markCopied("code");
   }
 
   if (notFound) {
     return (
-      <main className="flex flex-1 items-center justify-center p-4">
-        <Card className="w-full max-w-sm">
-          <CardContent className="pt-6 text-center">
-            <p>Místnost {roomCode} neexistuje.</p>
-            <Link href="/" className={buttonVariants({ className: "mt-4" })}>
+      <main className="relative flex flex-1 flex-col items-center justify-center gap-6 p-4">
+        <LobbyAtmosphere />
+        <BrandMark compact />
+        <Card className="relative w-full max-w-sm shadow-md ring-accent/25">
+          <CardContent className="flex flex-col items-center gap-3 pt-6 text-center">
+            <p className="text-sm text-foreground/80">Místnost s tímhle kódem neexistuje.</p>
+            <RoomCodeChip code={roomCode} size="lg" />
+            <Link href="/" className={buttonVariants({ className: "mt-2" })}>
               Zpět na úvod
             </Link>
           </CardContent>
@@ -182,8 +200,9 @@ export default function RoomPage() {
 
   if (!room) {
     return (
-      <main className="flex flex-1 items-center justify-center p-4">
-        <p className="text-muted-foreground">Načítám…</p>
+      <main className="relative flex flex-1 items-center justify-center p-4">
+        <LobbyAtmosphere />
+        <p className="relative text-foreground/70">Načítám…</p>
       </main>
     );
   }
@@ -194,16 +213,20 @@ export default function RoomPage() {
   const playerNames = Object.fromEntries(players.map((p) => [p.id, p.name]));
 
   return (
-    <main className="flex flex-1 items-center justify-center p-4">
-      <Card className={gameInProgress ? "w-full max-w-md" : "w-full max-w-sm"}>
+    <main className="relative flex flex-1 items-center justify-center p-4">
+      {!gameInProgress && <LobbyAtmosphere />}
+      <Card className={gameInProgress ? "relative w-full max-w-md overflow-visible" : "relative w-full max-w-sm shadow-md ring-accent/25"}>
         <CardHeader>
+          <p className="text-xs font-semibold tracking-wide text-primary uppercase">
+            Karty Duel
+          </p>
           <div className="flex items-center justify-between gap-2">
-            <CardTitle className="text-2xl">{roomCode}</CardTitle>
+            <RoomCodeChip code={roomCode} size="lg" />
             <Badge variant="secondary">{GAME_LABEL[room.game_type]}</Badge>
           </div>
           <Link
             href="/"
-            className="text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
+            className="text-xs text-foreground/70 underline underline-offset-2 hover:text-foreground"
           >
             ← Opustit hru
           </Link>
@@ -227,7 +250,7 @@ export default function RoomPage() {
 
           {!gameInProgress && (
             <div>
-              <p className="mb-2 text-sm font-medium text-muted-foreground">
+              <p className="mb-2 text-sm font-medium text-foreground/75">
                 Hráči ({players.length}/2)
               </p>
               <ul className="flex flex-col gap-2">
@@ -243,7 +266,7 @@ export default function RoomPage() {
                   </li>
                 ))}
                 {players.length === 0 && (
-                  <li className="text-sm text-muted-foreground">Zatím nikdo.</li>
+                  <li className="text-sm text-foreground/70">Zatím nikdo.</li>
                 )}
               </ul>
             </div>
@@ -251,16 +274,27 @@ export default function RoomPage() {
 
           {room.status === "waiting" && iAmIn && (
             <div className="flex flex-col gap-2">
-              <Button variant="outline" onClick={copyLink}>
-                Zkopírovat odkaz na místnost
-              </Button>
+              <div className="flex flex-col items-center gap-2 rounded-lg border border-accent/35 bg-secondary/70 px-3 py-3">
+                <p className="text-xs font-medium text-foreground/75">
+                  Nadiktuj kód druhému hráči
+                </p>
+                <RoomCodeChip code={roomCode} size="lg" />
+                <div className="flex w-full gap-2">
+                  <Button variant="outline" className="flex-1" onClick={copyCode}>
+                    {copied === "code" ? "Kód zkopírován" : "Kopírovat kód"}
+                  </Button>
+                  <Button variant="outline" className="flex-1" onClick={copyLink}>
+                    {copied === "link" ? "Odkaz zkopírován" : "Kopírovat odkaz"}
+                  </Button>
+                </div>
+              </div>
               {isHost && (
                 <Button onClick={handleStart} disabled={players.length < 2}>
                   {players.length < 2 ? "Čekám na druhého hráče…" : "Začít hru"}
                 </Button>
               )}
               {!isHost && (
-                <p className="text-center text-sm text-muted-foreground">
+                <p className="text-center text-sm text-foreground/70">
                   Čekám, až hru spustí host…
                 </p>
               )}
@@ -268,7 +302,7 @@ export default function RoomPage() {
           )}
 
           {room.status === "playing" && room.game_type === "uno" && (
-            <p className="text-center text-sm text-muted-foreground">
+            <p className="text-center text-sm text-foreground/70">
               Hra běží — samotné Uno UI přijde ve Fázi 3.
             </p>
           )}
@@ -283,7 +317,7 @@ export default function RoomPage() {
           )}
 
           {gameInProgress && (!myPlayerId || !gameId) && (
-            <p className="text-center text-sm text-muted-foreground">Načítám hru…</p>
+            <p className="text-center text-sm text-foreground/70">Načítám hru…</p>
           )}
         </CardContent>
       </Card>

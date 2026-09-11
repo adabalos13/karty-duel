@@ -50,7 +50,7 @@
 
 :root {
   --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: ui-monospace, monospace;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
   /* Teplá "hospodská" paleta laděná do karetní grafiky (bordó + zlatá) */
   --background: oklch(0.98 0.012 75);
@@ -64,7 +64,7 @@
   --secondary: oklch(0.94 0.02 70);
   --secondary-foreground: oklch(0.3 0.04 40);
   --muted: oklch(0.95 0.015 70);
-  --muted-foreground: oklch(0.52 0.03 45);
+  --muted-foreground: oklch(0.42 0.035 40);
   --accent: oklch(0.8 0.13 80);
   --accent-foreground: oklch(0.28 0.06 55);
   --destructive: oklch(0.577 0.245 27.325);
@@ -99,7 +99,7 @@
   --secondary: oklch(0.29 0.02 40);
   --secondary-foreground: oklch(0.92 0.012 75);
   --muted: oklch(0.27 0.02 40);
-  --muted-foreground: oklch(0.68 0.025 60);
+  --muted-foreground: oklch(0.74 0.03 70);
   --accent: oklch(0.42 0.1 25);
   --accent-foreground: oklch(0.95 0.012 75);
   --destructive: oklch(0.704 0.191 22.216);
@@ -127,6 +127,10 @@
   }
   body {
     @apply bg-background text-foreground;
+    background-image:
+      radial-gradient(ellipse 90% 55% at 50% -8%, oklch(0.86 0.09 75 / 0.65), transparent 58%),
+      radial-gradient(ellipse 55% 40% at 100% 110%, oklch(0.48 0.12 25 / 0.14), transparent 70%);
+    background-attachment: fixed;
   }
   html {
     @apply font-sans;

@@ -30,21 +30,23 @@ const PIP_COUNT: Partial<Record<Rank, number>> = {
 interface PlayingCardProps {
   card?: Card;
   onClick?: () => void;
+  onPress?: () => void;
   disabled?: boolean;
+  selected?: boolean;
   faceDown?: boolean;
   className?: string;
 }
 
 function PipColumn({ suit, count }: { suit: Suit; count: number }) {
   return (
-    <div className="flex flex-col gap-[3px]">
+    <div className="flex flex-col gap-[2px] sm:gap-[3px]">
       {Array.from({ length: count }).map((_, i) => (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           key={i}
           src={`/cards/suit-${suit}.png`}
           alt=""
-          className="h-[10px] w-[10px] object-contain sm:h-[13px] sm:w-[13px]"
+          className="h-4 w-4 object-contain sm:h-5 sm:w-5"
         />
       ))}
     </div>
@@ -76,7 +78,9 @@ function PipLayout({ suit, count }: { suit: Suit; count: number }) {
 export function PlayingCard({
   card,
   onClick,
+  onPress,
   disabled,
+  selected,
   faceDown,
   className,
 }: PlayingCardProps) {
@@ -98,10 +102,33 @@ export function PlayingCard({
     <button
       type="button"
       onClick={onClick}
+      onPointerDown={(event) => {
+        if (!onClick || disabled) return;
+        if (event.button !== 0) return;
+        onPress?.();
+      }}
+      onMouseDown={(event) => {
+        if (!onClick || disabled || event.button !== 0) return;
+        onPress?.();
+      }}
       disabled={!onClick || disabled}
+      aria-pressed={selected}
+      data-selected={selected ? "true" : undefined}
+      style={
+        selected
+          ? {
+              backgroundColor: "#f4e2a6",
+              boxShadow: "inset 0 0 0 3px #c9a227, 0 10px 18px oklch(0.4 0.08 80 / 0.35)",
+              transform: "translateY(-6px) scale(1.05)",
+              zIndex: 10,
+            }
+          : undefined
+      }
       className={cn(
-        "relative flex h-28 w-20 shrink-0 flex-col items-center justify-center overflow-hidden rounded-lg border bg-background font-semibold shadow-sm transition-transform sm:h-32 sm:w-24",
-        onClick && !disabled && "cursor-pointer hover:-translate-y-1",
+        "relative flex h-28 w-20 shrink-0 flex-col items-center justify-center overflow-hidden rounded-lg border bg-background font-semibold shadow-sm transition-[transform,box-shadow,background-color] duration-150 touch-manipulation [-webkit-tap-highlight-color:transparent] sm:h-32 sm:w-24",
+        onClick &&
+          !disabled &&
+          "cursor-pointer hover:-translate-y-1 active:scale-[0.97] active:bg-accent/25",
         disabled && "opacity-40",
         className,
       )}
