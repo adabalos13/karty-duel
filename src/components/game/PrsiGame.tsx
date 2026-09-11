@@ -49,11 +49,7 @@ export function PrsiGame({
     return () => clearTimeout(timeout);
   }, [invalidMessage]);
 
-  useEffect(() => {
-    if (!selectedCardKey || pendingSuitCard || !invalidMessage) return;
-    const timeout = setTimeout(() => setSelectedCardKey(null), 1400);
-    return () => clearTimeout(timeout);
-  }, [selectedCardKey, pendingSuitCard, invalidMessage]);
+  // Selected stays until the next tap or a successful play / suit dialog close.
 
   useEffect(() => {
     let active = true;
@@ -121,6 +117,7 @@ export function PrsiGame({
       return;
     }
     persist(applyMove(state!, { type: "play", playerId: myPlayerId, card }));
+    setSelectedCardKey(null);
   }
 
   function chooseSuit(suit: Suit) {
@@ -204,7 +201,7 @@ export function PrsiGame({
         </div>
       )}
 
-      <div className="flex flex-wrap justify-center gap-1">
+      <div className="flex flex-wrap justify-center gap-1 pt-1 pb-3">
         {myHand.map((card, i) => (
           <PlayingCard
             key={`${card.suit}-${card.rank}-${i}`}

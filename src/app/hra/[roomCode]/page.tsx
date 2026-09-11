@@ -215,7 +215,7 @@ export default function RoomPage() {
   return (
     <main className="relative flex flex-1 items-center justify-center p-4">
       {!gameInProgress && <LobbyAtmosphere />}
-      <Card className={gameInProgress ? "relative w-full max-w-md" : "relative w-full max-w-sm shadow-md ring-accent/25"}>
+      <Card className={gameInProgress ? "relative w-full max-w-md overflow-visible" : "relative w-full max-w-sm shadow-md ring-accent/25"}>
         <CardHeader>
           <p className="text-xs font-semibold tracking-wide text-primary uppercase">
             Karty Duel

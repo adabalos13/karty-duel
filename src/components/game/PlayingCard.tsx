@@ -104,18 +104,31 @@ export function PlayingCard({
       onClick={onClick}
       onPointerDown={(event) => {
         if (!onClick || disabled) return;
-        if (event.pointerType === "mouse" && event.button !== 0) return;
+        if (event.button !== 0) return;
+        onPress?.();
+      }}
+      onMouseDown={(event) => {
+        if (!onClick || disabled || event.button !== 0) return;
         onPress?.();
       }}
       disabled={!onClick || disabled}
       aria-pressed={selected}
+      data-selected={selected ? "true" : undefined}
+      style={
+        selected
+          ? {
+              backgroundColor: "#f4e2a6",
+              boxShadow: "inset 0 0 0 3px #c9a227, 0 10px 18px oklch(0.4 0.08 80 / 0.35)",
+              transform: "translateY(-6px) scale(1.05)",
+              zIndex: 10,
+            }
+          : undefined
+      }
       className={cn(
         "relative flex h-28 w-20 shrink-0 flex-col items-center justify-center overflow-hidden rounded-lg border bg-background font-semibold shadow-sm transition-[transform,box-shadow,background-color] duration-150 touch-manipulation [-webkit-tap-highlight-color:transparent] sm:h-32 sm:w-24",
         onClick &&
           !disabled &&
-          "cursor-pointer hover:-translate-y-1 active:scale-[0.97] active:bg-accent/25 active:ring-2 active:ring-accent active:shadow-md",
-        selected &&
-          "z-10 -translate-y-2 scale-[1.08] bg-[#f4e2a6] shadow-lg ring-[3px] ring-inset ring-[#c9a227]",
+          "cursor-pointer hover:-translate-y-1 active:scale-[0.97] active:bg-accent/25",
         disabled && "opacity-40",
         className,
       )}
