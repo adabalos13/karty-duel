@@ -31,20 +31,21 @@ interface PlayingCardProps {
   card?: Card;
   onClick?: () => void;
   disabled?: boolean;
+  selected?: boolean;
   faceDown?: boolean;
   className?: string;
 }
 
 function PipColumn({ suit, count }: { suit: Suit; count: number }) {
   return (
-    <div className="flex flex-col gap-[3px]">
+    <div className="flex flex-col gap-[2px] sm:gap-[3px]">
       {Array.from({ length: count }).map((_, i) => (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           key={i}
           src={`/cards/suit-${suit}.png`}
           alt=""
-          className="h-[10px] w-[10px] object-contain sm:h-[13px] sm:w-[13px]"
+          className="h-[15px] w-[15px] object-contain sm:h-[18px] sm:w-[18px]"
         />
       ))}
     </div>
@@ -77,6 +78,7 @@ export function PlayingCard({
   card,
   onClick,
   disabled,
+  selected,
   faceDown,
   className,
 }: PlayingCardProps) {
@@ -100,8 +102,12 @@ export function PlayingCard({
       onClick={onClick}
       disabled={!onClick || disabled}
       className={cn(
-        "relative flex h-28 w-20 shrink-0 flex-col items-center justify-center overflow-hidden rounded-lg border bg-background font-semibold shadow-sm transition-transform sm:h-32 sm:w-24",
-        onClick && !disabled && "cursor-pointer hover:-translate-y-1",
+        "relative flex h-28 w-20 shrink-0 flex-col items-center justify-center overflow-hidden rounded-lg border bg-background font-semibold shadow-sm transition-[transform,box-shadow,background-color] duration-150 touch-manipulation sm:h-32 sm:w-24",
+        onClick &&
+          !disabled &&
+          "cursor-pointer hover:-translate-y-1 active:scale-[0.97] active:bg-accent/20 active:ring-2 active:ring-accent active:shadow-md",
+        selected &&
+          "z-10 -translate-y-1.5 scale-[1.04] bg-accent/20 shadow-md ring-2 ring-accent",
         disabled && "opacity-40",
         className,
       )}

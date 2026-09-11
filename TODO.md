@@ -50,6 +50,11 @@
 - [ ] Vrátit výběr hry v lobby (Prší / Uno) — teď schovaný v `page.tsx` (`GAME_TYPE` konstanta)
 
 ## Fáze 4: Polish
+- [x] Atmosféra MUST: branding lobby (název, hierarchie, teplejší prázdný stav)
+- [x] Atmosféra MUST: kód místnosti jako monospace chip (zobrazení i sdílení)
+- [x] Atmosféra MUST: větší pipsy na kartách 7–10 (římské číslice zůstávají)
+- [x] Atmosféra MUST: čitelnější disabled/secondary ovládací prvky (bez šedivění karet v ruce)
+- [x] Atmosféra MUST: stisk/výběr karty v ruce (scale + teplý ring)
 - [ ] Animace tahů
 - [ ] Reconnect po výpadku spojení
 - [ ] Doladění mobilního UI (menší detaily, ne základní responsivita — ta je hotová od Fáze 1)

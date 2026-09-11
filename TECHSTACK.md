@@ -4,6 +4,7 @@
 - **Next.js 16** (App Router) - React framework
 - **TypeScript** - typová bezpečnost
 - **Tailwind CSS v4** - styling, mobile-first
+- **Plus Jakarta Sans** - UI font; **Geist Mono** - kódy místností (`RoomCodeChip`, vstup kódu)
 - **shadcn/ui** - UI komponenty (button, card, dialog, input, label, badge)
 - **lucide-react** - ikony
 
@@ -25,7 +26,10 @@ karty-duel/
 │   │   └── api/                     # (pokud bude potřeba server-side logika)
 │   ├── components/
 │   │   ├── ui/                      # shadcn komponenty
-│   │   ├── lobby/                   # komponenty pro čekárnu
+│   │   ├── lobby/                   # brand, kód místnosti, atmosféra lobby
+│   │   │   ├── BrandMark.tsx        # lockup Karty Duel + ikony barev
+│   │   │   ├── RoomCodeChip.tsx     # monospace chip pro room_code
+│   │   │   └── LobbyAtmosphere.tsx  # teplé prázdné pozadí lobby
 │   │   └── game/                    # herní UI (karty, ruka, lícovka)
 │   ├── lib/
 │   │   ├── supabase/                # klient, typy

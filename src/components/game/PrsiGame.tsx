@@ -41,12 +41,19 @@ export function PrsiGame({
   const [state, setState] = useState<PrsiState | null>(null);
   const [pendingSuitCard, setPendingSuitCard] = useState<Card | null>(null);
   const [invalidMessage, setInvalidMessage] = useState<string | null>(null);
+  const [selectedCardKey, setSelectedCardKey] = useState<string | null>(null);
 
   useEffect(() => {
     if (!invalidMessage) return;
     const timeout = setTimeout(() => setInvalidMessage(null), 1800);
     return () => clearTimeout(timeout);
   }, [invalidMessage]);
+
+  useEffect(() => {
+    if (!selectedCardKey || pendingSuitCard) return;
+    const timeout = setTimeout(() => setSelectedCardKey(null), 450);
+    return () => clearTimeout(timeout);
+  }, [selectedCardKey, pendingSuitCard]);
 
   useEffect(() => {
     let active = true;
@@ -97,8 +104,13 @@ export function PrsiGame({
   const opponentHand = state.hands[opponentId] ?? [];
   const top = state.discard[state.discard.length - 1];
 
-  function handleCardClick(card: Card) {
+  function cardKey(card: Card, index: number) {
+    return `${card.suit}-${card.rank}-${index}`;
+  }
+
+  function handleCardClick(card: Card, index: number) {
     if (!myTurn) return;
+    setSelectedCardKey(cardKey(card, index));
     if (!isCardPlayable(state!, card)) {
       setInvalidMessage("Tuhle kartu teď nemůžeš zahrát.");
       return;
@@ -122,6 +134,7 @@ export function PrsiGame({
       }),
     );
     setPendingSuitCard(null);
+    setSelectedCardKey(null);
   }
 
   function handleDraw() {
@@ -197,14 +210,20 @@ export function PrsiGame({
             key={`${card.suit}-${card.rank}-${i}`}
             card={card}
             disabled={!myTurn}
-            onClick={myTurn ? () => handleCardClick(card) : undefined}
+            selected={selectedCardKey === cardKey(card, i)}
+            onClick={myTurn ? () => handleCardClick(card, i) : undefined}
           />
         ))}
       </div>
 
       <Dialog
         open={!!pendingSuitCard}
-        onOpenChange={(open) => !open && setPendingSuitCard(null)}
+        onOpenChange={(open) => {
+          if (!open) {
+            setPendingSuitCard(null);
+            setSelectedCardKey(null);
+          }
+        }}
       >
         <DialogContent>
           <DialogHeader>

@@ -3,9 +3,17 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { BrandMark } from "@/components/lobby/BrandMark";
+import { LobbyAtmosphere } from "@/components/lobby/LobbyAtmosphere";
 import { supabase } from "@/lib/supabase/client";
 import { generateRoomCode } from "@/lib/room-code";
 import { savePlayerId } from "@/lib/local-identity";
@@ -102,11 +110,29 @@ export default function HomePage() {
     }
   }
 
+  const titles = {
+    choose: {
+      title: "Začni hru",
+      description: "Vytvoř místnost a nadiktuj kód, nebo se připoj ke kamarádovi.",
+    },
+    create: {
+      title: "Nová místnost",
+      description: "Zadej jméno — kód k nadiktování vznikne hned potom.",
+    },
+    join: {
+      title: "Připoj se",
+      description: "Stejný čtyřpísmenný kód, který ti řekl host.",
+    },
+  } as const;
+
   return (
-    <main className="flex flex-1 items-center justify-center p-4">
-      <Card className="w-full max-w-sm">
+    <main className="relative flex flex-1 flex-col items-center justify-center gap-6 p-4">
+      <LobbyAtmosphere />
+      <BrandMark />
+      <Card className="relative w-full max-w-sm shadow-md ring-accent/25">
         <CardHeader>
-          <CardTitle className="text-2xl">Karty Duel</CardTitle>
+          <CardTitle className="text-xl font-semibold">{titles[mode].title}</CardTitle>
+          <CardDescription>{titles[mode].description}</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           {mode === "choose" && (
@@ -162,6 +188,10 @@ export default function HomePage() {
                   onChange={(e) => setJoinCode(e.target.value.toLowerCase())}
                   placeholder="hoka"
                   maxLength={4}
+                  autoCapitalize="off"
+                  autoCorrect="off"
+                  spellCheck={false}
+                  className="h-11 text-center font-mono text-lg tracking-[0.35em] lowercase"
                 />
               </div>
               {error && <p className="text-sm text-destructive">{error}</p>}

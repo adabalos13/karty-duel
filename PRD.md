@@ -62,7 +62,11 @@ Standardní pravidla (108 karet, barvy červená/žlutá/zelená/modrá 0-9, Ski
 ## Požadavky na UI/UX
 - **Responsivní od základu** — plně funkční na mobilním prohlížeči i desktopu (typicky jeden hráč na mobilu, druhý na PC)
 - Jazyk UI: čeština
-- Vzhled: jednoduchý a čistý (neutrální shadcn styl, světlý/tmavý režim dle systému), čitelné karty, minimum ozdob
+- Vzhled: teplá paleta (bordó/zlatá), Plus Jakarta Sans. Lobby má jasný brand lockup „Karty Duel“ (ikony barev + titulek + podtitulek) a teplejší prázdný stav, ať to nepůsobí jako prázdný formulář
+- Kód místnosti se zobrazuje a sdílí jako monospace chip (např. `hoka`), ne jako běžný text — na úvodu i v čekárně, vstup kódu je taky mono
+- Karty 7–10: větší pipsy kvůli čitelnosti na mobilu, římské číslice v rohu zůstávají
+- Disabled/secondary tlačítka a inputy musí zůstat čitelné (ne vybledlé na 50 %), ale pořád zřetelně neprimární
+- Stisk karty v ruce: krátký scale + teplý ring/highlight. Karty se **nezešedivují** podle hratelnosti — jen toast po neplatném kliknutí. Celá ruka je ztlumená jen když není tvůj tah
 - Žádná autentizace — v localStorage se ukládá jen `player_id` per místnost (pro znovupřipojení po refreshi), jméno hráče se NEPAMATUJE mezi návštěvami
 
 ## Fáze
