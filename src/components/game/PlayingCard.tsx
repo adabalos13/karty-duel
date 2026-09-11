@@ -115,7 +115,7 @@ export function PlayingCard({
           !disabled &&
           "cursor-pointer hover:-translate-y-1 active:scale-[0.97] active:bg-accent/25 active:ring-2 active:ring-accent active:shadow-md",
         selected &&
-          "z-10 -translate-y-2 scale-[1.06] bg-accent/30 shadow-lg ring-2 ring-inset ring-accent",
+          "z-10 -translate-y-2 scale-[1.08] bg-[#f4e2a6] shadow-lg ring-[3px] ring-inset ring-[#c9a227]",
         disabled && "opacity-40",
         className,
       )}
